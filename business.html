@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הבית הצהוב – הרשמת עסקים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,61,165,.2); border-radius: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    :root {
+      --yellow:     #FFD700;
+      --yellow-dark:#E6C200;
+      --blue:       #003DA5;
+      --blue-dark:  #002a75;
+      --blue-mid:   #1a56c4;
+      --white:      #FFFFFF;
+      --bg:         #F0F3FA;
+      --gray:       #888;
+      --radius:     16px;
+      --shadow:     0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Heebo', sans-serif; background: var(--bg); color: #1a1a1a; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, var(--blue-dark) 0%, var(--blue) 60%, var(--blue-mid) 100%);
+      padding: 28px 24px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: var(--yellow);
+      opacity: .06;
+      top: -80px; left: -60px;
+    }
+    .hero-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .hero-logo span { color: var(--white); font-size: 20px; font-weight: 800; }
+    .hero-logo span em { color: var(--yellow); font-style: normal; }
+    .hero h1 { color: var(--white); font-size: 24px; font-weight: 900; line-height: 1.3; }
+    .hero h1 em { color: var(--yellow); font-style: normal; display: block; }
+    .hero p { color: rgba(255,255,255,.7); font-size: 13px; line-height: 1.7; margin-top: 10px; max-width: 320px; margin-inline: auto; }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-top: 22px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 16px;
+      padding: 14px 20px;
+      max-width: 340px;
+      margin-inline: auto;
+      margin-top: 20px;
+    }
+    .hero-stat { flex: 1; text-align: center; }
+    .hero-stat-num { font-size: 18px; font-weight: 900; color: var(--yellow); line-height: 1.1; }
+    .hero-stat-lbl { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 3px; }
+    .hero-stat-sep { width: 1px; background: rgba(255,255,255,.2); height: 32px; flex-shrink: 0; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 16px;
+      background: rgba(255,215,0,.15);
+      border: 1px solid rgba(255,215,0,.4);
+      color: var(--yellow); font-size: 12px; font-weight: 700;
+      padding: 6px 16px; border-radius: 20px;
+    }
+
+    /* ── STEPPER ── */
+    .stepper-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 16px 0;
+    }
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 4px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #D1D9EE;
+      z-index: 0;
+    }
+    .step-item.done:not(:last-child)::after,
+    .step-item.active:not(:last-child)::after {
+      background: var(--blue);
+    }
+    .step-circle {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #D1D9EE;
+      color: #888;
+      font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      transition: all .25s;
+      border: 2px solid #D1D9EE;
+    }
+    .step-item.active .step-circle {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0,61,165,.15);
+    }
+    .step-item.done .step-circle {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+    }
+    .step-label {
+      font-size: 10px; font-weight: 600;
+      color: #aaa;
+      margin-top: 6px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .step-item.active .step-label { color: var(--blue); font-weight: 800; }
+    .step-item.done .step-label { color: var(--blue); }
+
+    /* ── FORM WRAP ── */
+    .form-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px 16px 60px;
+    }
+    .form-card {
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      border: 2px solid rgba(0,61,165,.06);
+    }
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .section-title {
+      font-size: 15px; font-weight: 800;
+      color: var(--blue);
+      padding-bottom: 10px;
+      border-bottom: 2px solid #EEF2FF;
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-subtitle {
+      font-size: 13px; font-weight: 800;
+      color: var(--blue);
+      margin: 18px 0 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    label {
+      display: block; font-size: 13px; font-weight: 700;
+      color: var(--blue); margin-bottom: 7px;
+    }
+    label .req { color: var(--yellow-dark); }
+    label .opt { color: #aaa; font-weight: 400; font-size: 11px; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #E8EDF5;
+      border-radius: 12px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      color: #1a1a1a;
+      background: #FAFBFF;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0,61,165,.1);
+      background: var(--white);
+    }
+    textarea { resize: none; min-height: 90px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .divider { height: 1px; background: #EEF2FF; margin: 22px 0; }
+
+    /* ── CATEGORY ── */
+    .cat-section-label {
+      font-size: 12px; font-weight: 700; color: var(--gray);
+      margin-bottom: 8px; margin-top: 14px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .cat-pill {
+      border: 2px solid #E8EDF5;
+      border-radius: 10px;
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      background: #FAFBFF;
+      user-select: none;
+      position: relative;
+    }
+    .cat-pill input { display: none; }
+    .cat-pill .cat-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+    .cat-pill .cat-name { font-size: 11px; font-weight: 600; color: var(--gray); }
+    .cat-pill.primary {
+      border-color: var(--yellow-dark);
+      background: #FFFBEA;
+    }
+    .cat-pill.primary .cat-name { color: #92700a; }
+    .cat-pill.primary::after {
+      content: 'ראשית';
+      position: absolute; top: -8px; right: 50%; transform: translateX(50%);
+      background: var(--yellow-dark); color: var(--white);
+      font-size: 9px; font-weight: 800;
+      padding: 1px 6px; border-radius: 8px;
+    }
+    .cat-pill.secondary {
+      border-color: var(--blue);
+      background: #EEF3FF;
+    }
+    .cat-pill.secondary .cat-name { color: var(--blue); }
+    .cat-pill.secondary::after {
+      content: 'משנית';
+      position: absolute; top: -8px; right: 50%; transform: translateX(50%);
+      background: var(--blue); color: var(--white);
+      font-size: 9px; font-weight: 800;
+      padding: 1px 6px; border-radius: 8px;
+    }
+    .cat-hint {
+      font-size: 12px; color: var(--gray); margin-top: 10px; line-height: 1.5;
+      background: #F8FAFF; border-radius: 8px; padding: 10px 12px;
+    }
+
+    /* ── DISCOUNT TOGGLE ── */
+    .discount-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #F8FAFF; border: 2px solid #E8EDF5;
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; cursor: pointer;
+    }
+    .discount-row label { margin: 0; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a1a1a; }
+    .toggle {
+      width: 44px; height: 24px;
+      background: #CBD5E1; border-radius: 12px;
+      position: relative; transition: background .2s; flex-shrink: 0;
+    }
+    .toggle::after {
+      content: '';
+      position: absolute; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--white);
+      top: 3px; right: 3px;
+      transition: transform .2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    }
+    input[type="checkbox"].toggle-input { display: none; }
+    input[type="checkbox"].toggle-input:checked + .toggle { background: var(--blue); }
+    input[type="checkbox"].toggle-input:checked + .toggle::after { transform: translateX(-20px); }
+    .discount-details { display: none; margin-bottom: 12px; }
+
+    /* ── PHYSICAL REDEMPTION NOTE ── */
+    .physical-how {
+      background: #F0FDF4;
+      border: 1.5px solid #BBF7D0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #14532d;
+      line-height: 1.8;
+    }
+    .physical-how strong { color: #15803d; display: block; margin-bottom: 4px; font-size: 14px; }
+
+    /* ── HOURS ── */
+    .hours-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #F8FAFF; border: 2px solid #E8EDF5;
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; cursor: pointer;
+    }
+    .hours-toggle-row label { margin: 0; cursor: pointer; font-size: 14px; font-weight: 600; color: #1a1a1a; }
+    .hours-table { display: none; }
+    .hours-row {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .day-label { font-size: 13px; font-weight: 700; color: var(--blue); }
+    .hours-inputs {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hours-inputs input[type="time"] {
+      flex: 1; padding: 8px 10px; font-size: 13px; border-radius: 8px; border: 2px solid #E8EDF5;
+    }
+    .hours-inputs span { font-size: 12px; color: var(--gray); flex-shrink: 0; }
+    .closed-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--gray); font-weight: 600; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .closed-label input { width: auto; padding: 0; border: none; background: none; width: 14px; height: 14px; }
+
+    /* ── CONTACT SECTION ── */
+    .contact-note {
+      background: #EEF3FF; border-radius: 10px; padding: 12px 14px;
+      font-size: 13px; color: var(--blue); line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* ── SOCIAL ── */
+    .social-input {
+      display: flex; align-items: center;
+      border: 2px solid #E8EDF5; border-radius: 12px;
+      overflow: hidden; background: #FAFBFF; transition: border-color .2s;
+    }
+    .social-input:focus-within { border-color: var(--blue); }
+    .social-prefix {
+      padding: 12px 12px;
+      background: #EEF2FF; color: var(--blue);
+      font-size: 13px; font-weight: 600;
+      white-space: nowrap;
+      border-left: 2px solid #E8EDF5;
+    }
+    .social-input input { border: none; border-radius: 0; flex: 1; background: transparent; }
+    .social-input input:focus { box-shadow: none; }
+
+    /* ── UPLOAD ── */
+    .upload-zone {
+      border: 2px dashed #CBD5E1; border-radius: 14px;
+      padding: 24px 16px; text-align: center; cursor: pointer;
+      transition: all .2s; background: #FAFBFF; position: relative;
+    }
+    .upload-zone:hover { border-color: var(--blue); background: #EEF3FF; }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-text { font-size: 13px; font-weight: 600; color: var(--blue); }
+    .upload-sub  { font-size: 11px; color: var(--gray); margin-top: 4px; }
+    .upload-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .preview-thumb { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; border: 2px solid #E8EDF5; }
+
+    /* ── NAVIGATION BUTTONS ── */
+    .btn-row { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-next {
+      flex: 1;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+      color: var(--white); border: none; border-radius: 14px;
+      padding: 15px; font-family: 'Heebo', sans-serif;
+      font-size: 16px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,61,165,.3);
+      transition: transform .18s;
+    }
+    .btn-next:active { transform: scale(.98); }
+    .btn-back {
+      background: #EEF3FF; color: var(--blue);
+      border: 2px solid #D1D9EE; border-radius: 14px;
+      padding: 15px 20px; font-family: 'Heebo', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-back:hover { background: #e0e8ff; }
+    .btn-submit {
+      flex: 1;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+      color: var(--white); border: none; border-radius: 14px;
+      padding: 16px; font-family: 'Heebo', sans-serif;
+      font-size: 17px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,61,165,.35);
+      transition: transform .18s;
+    }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── FAN VERIFICATION ── */
+    .verify-box {
+      background: #EEF3FF; border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 18px;
+      font-size: 13px; color: var(--blue); line-height: 1.7;
+      border: 1.5px solid rgba(0,61,165,.12);
+    }
+
+    /* ── SUCCESS ── */
+    .success-state {
+      display: none; text-align: center; padding: 16px 0;
+    }
+    .success-icon {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-dark));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 18px;
+      box-shadow: 0 8px 24px rgba(255,215,0,.4);
+      animation: popIn .5s cubic-bezier(.17,.67,.46,1.5);
+    }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-state h3 { font-size: 22px; font-weight: 800; color: var(--blue); }
+    .success-state p  { color: var(--gray); font-size: 14px; line-height: 1.7; margin-top: 10px; }
+
+    /* ── ERRORS ── */
+    .field-error { color: #d97706; font-size: 12px; margin-top: 5px; display: none; }
+    input.error, select.error, textarea.error { border-color: #d97706; }
+
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite;
+      vertical-align: middle; margin-left: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── BIZ TYPE CARDS ── */
+    .biz-type-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .biz-type-card {
+      border: 2px solid #E8EDF5;
+      border-radius: 14px;
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .18s;
+      background: #FAFBFF;
+      user-select: none;
+    }
+    .biz-type-card:hover { border-color: var(--blue); background: #EEF3FF; }
+    .biz-type-card.selected {
+      border-color: var(--blue);
+      background: linear-gradient(160deg, #EEF3FF 0%, #dde8ff 100%);
+      box-shadow: 0 0 0 3px rgba(0,61,165,.12);
+    }
+    .biz-type-icon { font-size: 28px; margin-bottom: 6px; }
+    .biz-type-name { font-size: 13px; font-weight: 800; color: var(--blue); margin-bottom: 3px; }
+    .biz-type-desc { font-size: 11px; color: var(--gray); line-height: 1.4; }
+    .biz-type-card.selected .biz-type-name { color: var(--blue); }
+
+    /* ── REGION CHIPS ── */
+    .region-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .region-chip {
+      border: 2px solid #E8EDF5;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+      background: #FAFBFF;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+    }
+    .region-chip:hover { border-color: var(--blue); color: var(--blue); }
+    .region-chip.selected {
+      border-color: var(--blue);
+      background: #EEF3FF;
+      color: var(--blue);
+    }
+
+    footer {
+      background: var(--blue-dark); color: rgba(255,255,255,.5);
+      text-align: center; padding: 24px 20px; font-size: 13px;
+    }
+    footer strong { color: var(--yellow); }
+  </style>
+</head>
+<body>
+
+<!-- Netlify Forms detection (hidden) -->
+<form name="business-registration" netlify netlify-honeypot="bot-field" hidden>
+  <input name="owner-first" /><input name="owner-last" />
+  <input name="owner-phone" /><input name="owner-email" />
+  <input name="is-subscriber" /><input name="gate" /><input name="sub-num" />
+  <input name="fb-url" /><input name="biz-types" /><input name="biz-name" />
+  <input name="biz-desc" /><input name="biz-city" /><input name="biz-address" />
+  <input name="biz-regions" /><input name="biz-website-online" />
+  <input name="biz-phone" /><input name="biz-whatsapp" /><input name="biz-service-email" />
+  <input name="category-primary" /><input name="category-secondary" />
+  <input name="has-discount" /><input name="discount-text" />
+  <input name="discount-type" /><input name="discount-code" />
+  <input name="biz-hours" /><input name="instagram" />
+  <input name="facebook" /><input name="website" />
+</form>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-logo">
+    <svg width="28" height="28" viewBox="0 0 104 118" fill="none">
+      <g style="fill:#FFD700;">
+        <g transform="matrix(1.25,0,0,1.25,0,30.09)"><path d="M0,0 26,0 13,22.9z"/></g>
+        <g transform="matrix(1.25,0,0,1.25,0.42,30.09)"><path d="M27.4,0 16.4,19.1 32.4,19.1 32.4,31.9 8.7,31.9 0,46.6 41.8,46.6 41.8,31.9 40.4,31.9 40.4,19.1z"/></g>
+        <g transform="matrix(1.25,0,0,1.25,24.2,58.2)"><path d="M3.8,0A3.8,3.8,0,1,1,0,3.8A3.8,3.8,0,0,1,3.8,0z"/></g>
+        <g transform="matrix(1.25,0,0,1.25,34.4,57.3)"><path d="M0.2,25.8 13.6,48.8 26.9,25.8 26.9,0 21.9,0 21.9,25.8z"/></g>
+        <g transform="matrix(1.25,0,0,1.25,36.9,30)"><path d="M0.2,0 13.8,20 13.8,46.6 18.9,40.1 18.9,21 29.2,21 29.2,32.1 25.9,32.1 25.9,46.6 52.7,46.6 39.8,23.5 53.9,0 26.9,0 16,14 5.9,0z"/></g>
+        <g transform="matrix(1.25,0,0,1.25,35.2,0)"><path d="M0,23.4 13.2,0 26.9,23.4 17.4,35.9 8.4,23.4z"/></g>
+      </g>
+    </svg>
+    <span>הבית <em>הצהוב</em></span>
+  </div>
+
+  <h1>הצטרף לאינדקס העסקים<em>של אוהדי מכבי תל אביב</em></h1>
+  <p>הכל נשאר במשפחה</p>
+  <div class="hero-badge">✅ הרשמה חינמית · לעסקים של אוהדי מכבי בלבד</div>
+</section>
+
+<!-- STEPPER -->
+<div class="stepper-wrap">
+  <div class="stepper" id="stepperBar">
+    <div class="step-item active" id="si-1">
+      <div class="step-circle">1</div>
+      <div class="step-label">בעל<br/>העסק</div>
+    </div>
+    <div class="step-item" id="si-2">
+      <div class="step-circle">2</div>
+      <div class="step-label">פרטי<br/>העסק</div>
+    </div>
+    <div class="step-item" id="si-3">
+      <div class="step-circle">3</div>
+      <div class="step-label">קטגוריה<br/>והטבה</div>
+    </div>
+    <div class="step-item" id="si-4">
+      <div class="step-circle">4</div>
+      <div class="step-label">תמונות<br/>ושליחה</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap">
+  <div class="form-card" id="mainCard">
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 1 — פרטי בעל העסק + אימות אוהד  -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="step-panel active" id="step1">
+
+      <div class="section-title">👤 פרטי בעל העסק</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ownerFirst">שם פרטי <span class="req">*</span></label>
+          <input type="text" id="ownerFirst" placeholder="ישראל" autocomplete="given-name" />
+          <div class="field-error" id="err-ownerFirst">שדה חובה</div>
+        </div>
+        <div class="form-group">
+          <label for="ownerLast">שם משפחה <span class="req">*</span></label>
+          <input type="text" id="ownerLast" placeholder="ישראלי" autocomplete="family-name" />
+          <div class="field-error" id="err-ownerLast">שדה חובה</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ownerPhone">טלפון <span class="req">*</span></label>
+          <input type="tel" id="ownerPhone" placeholder="050-0000000" inputmode="tel" />
+          <div class="field-error" id="err-ownerPhone">מספר לא תקין</div>
+        </div>
+        <div class="form-group">
+          <label for="ownerEmail">אימייל <span class="req">*</span></label>
+          <input type="email" id="ownerEmail" placeholder="you@gmail.com" inputmode="email" />
+          <div class="field-error" id="err-ownerEmail">מייל לא תקין</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- אימות אוהד -->
+      <div class="section-title">🛡️ אימות אוהד</div>
+      <div class="verify-box">
+        כדי להבטיח שהאינדקס נשאר בלעדי לאוהדים — נבקשך לאשר את היותך אוהד מכבי.
+      </div>
+
+      <div class="form-group">
+        <label for="bizIsSubscriber">האם אתה מנוי של מכבי תל אביב? <span class="req">*</span></label>
+        <select id="bizIsSubscriber" onchange="handleBizSubscriber(this.value)">
+          <option value="">בחר תשובה...</option>
+          <option value="yes">כן, אני מנוי</option>
+          <option value="no">לא</option>
+        </select>
+        <div class="field-error" id="err-bizIsSubscriber">נא לענות</div>
+      </div>
+
+      <div id="bizSubscriberFields" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bizGate">שער <span class="req">*</span></label>
+            <select id="bizGate">
+              <option value="">בחר שער...</option>
+              <option>1</option><option>2</option><option>7</option>
+              <option>8</option><option>11</option><option>13</option>
+            </select>
+            <div class="field-error" id="err-bizGate">נא לבחור שער</div>
+          </div>
+          <div class="form-group">
+            <label for="bizSubNum">מספר מנוי <span class="req">*</span></label>
+            <input type="text" id="bizSubNum" placeholder="12345" inputmode="numeric" />
+            <div class="field-error" id="err-bizSubNum">שדה חובה</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="bizNonSubFields" style="display:none">
+        <div class="form-group">
+          <label for="bizFanPhoto">תמונה בשער אוהדים <span class="req">*</span></label>
+          <input type="file" id="bizFanPhoto" accept="image/*" style="padding:10px 12px;font-size:13px;" />
+          <div class="field-error" id="err-bizFanPhoto">נא לצרף תמונה</div>
+        </div>
+        <div class="form-group">
+          <label for="bizFbUrl">קישור לפרופיל פייסבוק <span class="req">*</span></label>
+          <input type="url" id="bizFbUrl" placeholder="https://facebook.com/yourname" inputmode="url" />
+          <div class="field-error" id="err-bizFbUrl">נא להזין קישור תקין</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-next" onclick="goNext(1)">המשך ← פרטי העסק</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 2 — פרטי העסק                   -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="step-panel" id="step2">
+
+      <div class="section-title">🏪 פרטי העסק</div>
+
+      <!-- סוג עסק -->
+      <div class="form-group">
+        <label>איך מתבצעת המכירה / השירות? <span class="req">*</span> <span class="opt">(ניתן לבחור עד 2)</span></label>
+        <div class="biz-type-grid" id="bizTypeGrid">
+          <div class="biz-type-card" data-type="physical" onclick="selectBizType('physical')">
+            <div class="biz-type-icon">🏪</div>
+            <div class="biz-type-name">חנות פיזית</div>
+            <div class="biz-type-desc">לקוחות מגיעים אליך</div>
+          </div>
+          <div class="biz-type-card" data-type="online" onclick="selectBizType('online')">
+            <div class="biz-type-icon">🌐</div>
+            <div class="biz-type-name">אונליין</div>
+            <div class="biz-type-desc">קנייה דרך האתר</div>
+          </div>
+          <div class="biz-type-card" data-type="pro" onclick="selectBizType('pro')">
+            <div class="biz-type-icon">🔧</div>
+            <div class="biz-type-name">בעל מקצוע</div>
+            <div class="biz-type-desc">אתה מגיע ללקוח</div>
+          </div>
+        </div>
+        <div class="field-error" id="err-bizType">נא לבחור סוג עסק</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-group">
+        <label for="bizName">שם העסק <span class="req">*</span></label>
+        <input type="text" id="bizName" placeholder="למשל: מאפיית הצהוב" />
+        <div class="field-error" id="err-bizName">שדה חובה</div>
+      </div>
+
+      <div class="form-group">
+        <label for="bizDesc">תיאור קצר של העסק <span class="req">*</span></label>
+        <textarea id="bizDesc" placeholder="ספר לנו במה העסק שלך עוסק, מה מיוחד בו..."></textarea>
+        <div class="field-error" id="err-bizDesc">שדה חובה (לפחות 10 תווים)</div>
+      </div>
+
+      <!-- עיר — לפיזי -->
+      <div class="form-group" id="wrap-bizCity" style="display:none;">
+        <label for="bizCity">עיר <span class="req">*</span></label>
+        <input type="text" id="bizCity" placeholder="תל אביב" />
+        <div class="field-error" id="err-bizCity">שדה חובה</div>
+      </div>
+
+      <!-- כתובת — לפיזי -->
+      <div class="form-group" id="wrap-bizAddress" style="display:none;">
+        <label for="bizAddress">כתובת מלאה <span class="req">*</span></label>
+        <input type="text" id="bizAddress" placeholder="רחוב הרצל 1" />
+        <div class="field-error" id="err-bizAddress">שדה חובה</div>
+      </div>
+
+      <!-- אתר — לאונליין -->
+      <div class="form-group" id="wrap-bizWebsiteStep2" style="display:none;">
+        <label for="bizWebsiteStep2">אתר החנות <span class="req">*</span></label>
+        <div class="social-input">
+          <span class="social-prefix">🌐</span>
+          <input type="url" id="bizWebsiteStep2" placeholder="www.example.co.il" inputmode="url" />
+        </div>
+        <div class="field-error" id="err-bizWebsiteStep2">שדה חובה לעסק אונליין</div>
+      </div>
+
+      <!-- אזורי פעילות — לבעל מקצוע -->
+      <div class="form-group" id="wrap-bizRegions" style="display:none;">
+        <label>אזורי פעילות <span class="req">*</span></label>
+        <div class="region-grid" id="regionGrid">
+          <div class="region-chip" onclick="toggleRegion(this)">כל הארץ</div>
+          <div class="region-chip" onclick="toggleRegion(this)">גוש דן</div>
+          <div class="region-chip" onclick="toggleRegion(this)">ירושלים והסביבה</div>
+          <div class="region-chip" onclick="toggleRegion(this)">השפלה</div>
+          <div class="region-chip" onclick="toggleRegion(this)">השרון</div>
+          <div class="region-chip" onclick="toggleRegion(this)">חיפה והצפון</div>
+          <div class="region-chip" onclick="toggleRegion(this)">הדרום</div>
+        </div>
+        <div class="field-error" id="err-bizRegions">נא לבחור אזור אחד לפחות</div>
+      </div>
+
+      <div class="form-group">
+        <label for="bizPhone">טלפון העסק <span class="opt">(אופציונלי)</span></label>
+        <input type="tel" id="bizPhone" placeholder="03-0000000" inputmode="tel" />
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- יצירת קשר -->
+      <div class="section-title">📞 יצירת קשר עם לקוחות</div>
+      <div class="contact-note">
+        איך הלקוחות יוכלו לפנות אליך? מלא את מה שרלוונטי לעסק שלך.
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp <span class="opt">(אופציונלי)</span></label>
+        <div class="social-input">
+          <span class="social-prefix">📱</span>
+          <input type="tel" id="bizWhatsapp" placeholder="050-0000000" inputmode="tel" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>מייל שירות לקוחות <span class="opt">(אופציונלי)</span></label>
+        <div class="social-input">
+          <span class="social-prefix">✉️</span>
+          <input type="email" id="bizServiceEmail" placeholder="info@example.co.il" inputmode="email" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" onclick="goBack(2)">→ חזור</button>
+        <button type="button" class="btn-next" onclick="goNext(2)">המשך ← קטגוריה</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 3 — קטגוריה + הטבה + שעות       -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="step-panel" id="step3">
+
+      <div class="section-title">📋 קטגוריה, הטבה ושעות</div>
+
+      <!-- קטגוריה -->
+      <div class="form-group">
+        <label>קטגוריה <span class="req">*</span></label>
+        <div class="cat-hint">
+          לחץ פעם אחת לקטגוריה <strong>ראשית</strong> (צהוב) · לחץ שנית לקטגוריה <strong>משנית</strong> (כחול) · לחץ שלישית לביטול<br/>
+          עד קטגוריה ראשית אחת + 2 משניות
+        </div>
+        <div style="height:12px;"></div>
+        <div class="category-grid" id="categoryGrid">
+          <div class="cat-pill" data-cat="food" onclick="toggleCat(this)">
+            <span class="cat-icon">🍕</span>
+            <span class="cat-name">אוכל ושתייה</span>
+          </div>
+          <div class="cat-pill" data-cat="fashion" onclick="toggleCat(this)">
+            <span class="cat-icon">👕</span>
+            <span class="cat-name">ביגוד ואופנה</span>
+          </div>
+          <div class="cat-pill" data-cat="pro" onclick="toggleCat(this)">
+            <span class="cat-icon">🔧</span>
+            <span class="cat-name">בעלי מקצוע</span>
+          </div>
+          <div class="cat-pill" data-cat="health" onclick="toggleCat(this)">
+            <span class="cat-icon">💊</span>
+            <span class="cat-name">בריאות ויופי</span>
+          </div>
+          <div class="cat-pill" data-cat="finance" onclick="toggleCat(this)">
+            <span class="cat-icon">📊</span>
+            <span class="cat-name">פיננסים</span>
+          </div>
+          <div class="cat-pill" data-cat="sport" onclick="toggleCat(this)">
+            <span class="cat-icon">⚽</span>
+            <span class="cat-name">ספורט ופנאי</span>
+          </div>
+          <div class="cat-pill" data-cat="tech" onclick="toggleCat(this)">
+            <span class="cat-icon">💻</span>
+            <span class="cat-name">טכנולוגיה</span>
+          </div>
+          <div class="cat-pill" data-cat="legal" onclick="toggleCat(this)">
+            <span class="cat-icon">⚖️</span>
+            <span class="cat-name">משפטים</span>
+          </div>
+          <div class="cat-pill" data-cat="other" onclick="toggleCat(this)">
+            <span class="cat-icon">📦</span>
+            <span class="cat-name">אחר</span>
+          </div>
+        </div>
+        <div class="field-error" id="err-category">נא לבחור קטגוריה ראשית אחת לפחות</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- הטבה -->
+      <div class="section-subtitle">💛 הטבה לחברים</div>
+
+      <div style="background:#FFFBEA;border:1.5px solid #E6C200;border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:13px;color:#78590a;line-height:1.7;">
+        💛 <strong>עסקים עם הטבה מקבלים עדיפות בתצוגה</strong> — אוהדים מחפשים קודם כל את מי שנותן להם ערך.
+      </div>
+
+      <div class="discount-row" onclick="toggleDiscount()">
+        <label for="hasDiscount">אני מציע הנחה / הטבה לחברים</label>
+        <div>
+          <input type="checkbox" class="toggle-input" id="hasDiscount" checked />
+          <div class="toggle"></div>
+        </div>
+      </div>
+
+      <div class="discount-details" id="discountDetails" style="display:block;">
+        <div class="form-group">
+          <label for="discountText">פרטי ההטבה <span class="req">*</span></label>
+          <input type="text" id="discountText" placeholder='למשל: "10% הנחה על כל הקנייה" או "קפה שני חינם"' />
+          <div class="field-error" id="err-discountText">נא לפרט את ההטבה</div>
+        </div>
+
+        <div class="form-group">
+          <label for="discountType">איפה ניתן לממש? <span class="req">*</span></label>
+          <select id="discountType" onchange="handleDiscountType(this.value)">
+            <option value="">בחר...</option>
+            <option value="online">חנות אונליין</option>
+            <option value="physical">חנות פיזית</option>
+          </select>
+          <div class="field-error" id="err-discountType">נא לבחור סוג מימוש</div>
+        </div>
+
+        <!-- אונליין -->
+        <div id="onlineFields" style="display:none">
+          <div class="form-group">
+            <label for="discountCode">קוד קופון <span class="req">*</span></label>
+            <input type="text" id="discountCode" placeholder="MACCABI10" style="letter-spacing:2px; text-transform:uppercase;" />
+            <div class="field-error" id="err-discountCode">קוד קופון הוא חובה לרכישה אונליין</div>
+          </div>
+          <div style="background:#EEF3FF; border-radius:10px; padding:12px 14px; font-size:13px; color:#1a1a1a; line-height:1.8; border:1.5px solid rgba(0,61,165,.12);">
+            💡 הקוד יוצג לאוהדים ישירות בעמוד העסק שלך — רצוי קוד ייחודי לאוהדי מכבי בלבד
+          </div>
+        </div>
+
+        <!-- פיזי -->
+        <div id="physicalNote" style="display:none;">
+          <div class="physical-how">
+            <strong>✅ איך זה עובד בחנות הפיזית?</strong>
+            הלקוח יציג בפניך את <strong>תעודת החבר הדיגיטלית שלו</strong> מהנייד — זהו! אתה מאשר שהוא חבר ונותן לו את ההטבה.<br/>
+            התעודה כוללת שם, מספר חבר ותאריך הצטרפות — קל לאימות.
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- שעות פעילות -->
+      <div class="section-subtitle">🕐 שעות פעילות <span style="font-weight:400;color:#aaa;font-size:12px">(אופציונלי)</span></div>
+
+      <div class="form-group">
+        <label for="bizHours">שעות פעילות</label>
+        <input type="text" id="bizHours" placeholder='למשל: א׳-ה׳ 09:00-19:00, ו׳ 09:00-14:00, שבת סגור' />
+        <div style="font-size:11px;color:var(--gray);margin-top:6px;">כתוב בחופשיות — הנוסח שנוח לך</div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" onclick="goBack(3)">→ חזור</button>
+        <button type="button" class="btn-next" onclick="goNext(3)">המשך ← תמונות</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STEP 4 — תמונות + רשתות + שליחה      -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="step-panel" id="step4">
+
+      <div class="section-title">📷 תמונות ורשתות</div>
+
+      <div class="form-group">
+        <label>לוגו העסק <span class="opt">(אופציונלי)</span></label>
+        <div class="upload-zone" id="logoZone">
+          <input type="file" id="logoFile" accept="image/*" onchange="previewImages('logoFile','logoPreview',1)" />
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-text">לחץ להעלאת לוגו</div>
+          <div class="upload-sub">PNG, JPG · עד 5MB</div>
+        </div>
+        <div class="upload-preview" id="logoPreview"></div>
+      </div>
+
+      <div class="form-group">
+        <label>תמונות נוספות <span class="opt">(עד 5 — מוצרים, תפריט, המקום)</span></label>
+        <div class="upload-zone" id="photosZone">
+          <input type="file" id="photosFiles" accept="image/*" multiple onchange="previewImages('photosFiles','photosPreview',5)" />
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">לחץ לבחירת תמונות</div>
+          <div class="upload-sub">ניתן לבחור מספר תמונות במקביל</div>
+        </div>
+        <div class="upload-preview" id="photosPreview"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title" style="border:none;padding:0;margin-bottom:16px;">🔗 נוכחות דיגיטלית <span style="font-weight:400;color:#aaa;font-size:12px">(אופציונלי)</span></div>
+
+      <div class="form-group">
+        <label>אתר אינטרנט</label>
+        <div class="social-input">
+          <span class="social-prefix">🌐</span>
+          <input type="url" id="bizWebsite" placeholder="www.example.co.il" inputmode="url" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>אינסטגרם</label>
+          <div class="social-input">
+            <span class="social-prefix">@</span>
+            <input type="text" id="bizInstagram" placeholder="username" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>פייסבוק</label>
+          <div class="social-input">
+            <span class="social-prefix">fb/</span>
+            <input type="text" id="bizFacebook" placeholder="pagename" />
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" onclick="goBack(4)">→ חזור</button>
+        <button type="button" class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+          שלח בקשת הצטרפות לאינדקס
+        </button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">🏆</div>
+      <h3>הבקשה התקבלה!</h3>
+      <p>
+        תודה! הפרטים של העסק שלך הועברו לצוות.<br/>
+        לאחר בדיקה ואישור — העסק שלך יופיע<br/>
+        באינדקס הבלעדי של הבית הצהוב. 💛
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <strong>הבית הצהוב</strong> · אינדקס עסקים לאוהדים
+</footer>
+
+<script type="module">
+  import { db } from './firebase-config.js';
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  // ── STEPPER STATE ──
+  let currentStep = 1;
+
+  function updateStepper(step) {
+    for (let i = 1; i <= 4; i++) {
+      const si = document.getElementById('si-' + i);
+      si.classList.remove('active', 'done');
+      const circle = si.querySelector('.step-circle');
+      if (i < step) {
+        si.classList.add('done');
+        circle.textContent = '✓';
+      } else if (i === step) {
+        si.classList.add('active');
+        circle.textContent = i;
+      } else {
+        circle.textContent = i;
+      }
+    }
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    updateStepper(n);
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goBack(fromStep) {
+    showStep(fromStep - 1);
+  }
+
+  // ── VALIDATION HELPERS ──
+  const phoneRx = /^0[0-9]{1,2}[-.\s]?[0-9]{7,8}$/;
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function vf(id, ok, msg) {
+    const el  = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    if (!el) return true;
+    if (!ok) {
+      el.classList.add('error');
+      if (err) { if (msg) err.textContent = msg; err.style.display = 'block'; }
+      return false;
+    }
+    el.classList.remove('error');
+    if (err) err.style.display = 'none';
+    return true;
+  }
+
+  // ── STEP VALIDATION ──
+  function validateStep1() {
+    const fn    = document.getElementById('ownerFirst').value.trim();
+    const ln    = document.getElementById('ownerLast').value.trim();
+    const phone = document.getElementById('ownerPhone').value.trim();
+    const email = document.getElementById('ownerEmail').value.trim();
+    const isSub = document.getElementById('bizIsSubscriber').value;
+
+    let ok = true;
+    ok = vf('ownerFirst', fn.length >= 2) && ok;
+    ok = vf('ownerLast',  ln.length >= 2) && ok;
+    ok = vf('ownerPhone', phoneRx.test(phone.replace(/\s/g,''))) && ok;
+    ok = vf('ownerEmail', emailRx.test(email)) && ok;
+    ok = vf('bizIsSubscriber', isSub !== '') && ok;
+
+    if (isSub === 'yes') {
+      ok = vf('bizGate',   document.getElementById('bizGate').value !== '') && ok;
+      ok = vf('bizSubNum', document.getElementById('bizSubNum').value.trim().length >= 3) && ok;
+    }
+    if (isSub === 'no') {
+      ok = vf('bizFanPhoto', document.getElementById('bizFanPhoto').files.length > 0) && ok;
+      const fb = document.getElementById('bizFbUrl').value.trim();
+      ok = vf('bizFbUrl', fb.startsWith('http') && fb.includes('facebook')) && ok;
+    }
+    return ok;
+  }
+
+  function validateStep2() {
+    const name    = document.getElementById('bizName').value.trim();
+    const desc    = document.getElementById('bizDesc').value.trim();
+    const address = document.getElementById('bizAddress').value.trim();
+
+    let ok = true;
+    ok = vf('bizName',    name.length >= 2)    && ok;
+    ok = vf('bizDesc',    desc.length >= 10)   && ok;
+    ok = vf('bizAddress', address.length >= 5) && ok;
+    return ok;
+  }
+
+  function validateStep3() {
+    const primaryCat = document.querySelector('#categoryGrid .cat-pill.primary');
+    let ok = true;
+    ok = vf('category', !!primaryCat) && ok;
+
+    const disc     = document.getElementById('hasDiscount').checked;
+    const discText = document.getElementById('discountText').value.trim();
+    const discType = document.getElementById('discountType').value;
+
+    if (disc) {
+      ok = vf('discountText', discText.length >= 3) && ok;
+      ok = vf('discountType', discType !== '')       && ok;
+      if (discType === 'online') {
+        const code = document.getElementById('discountCode').value.trim();
+        ok = vf('discountCode', code.length >= 2)    && ok;
+      }
+    }
+    return ok;
+  }
+
+  function goNext(fromStep) {
+    showStep(fromStep + 1);
+  }
+
+  // ── SUBMIT ──
+  async function handleSubmit() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'שולח... <span class="spinner"></span>';
+
+    const data = {
+      // פרטי בעל העסק
+      ownerFirst:       document.getElementById('ownerFirst').value.trim(),
+      ownerLast:        document.getElementById('ownerLast').value.trim(),
+      ownerPhone:       document.getElementById('ownerPhone').value.trim(),
+      ownerEmail:       document.getElementById('ownerEmail').value.trim(),
+      isSubscriber:     document.getElementById('bizIsSubscriber').value,
+      gate:             document.getElementById('bizGate').value,
+      subNum:           document.getElementById('bizSubNum').value.trim(),
+      fbUrl:            document.getElementById('bizFbUrl').value.trim(),
+
+      // פרטי העסק
+      bizTypes:         [...selectedBizTypes],
+      name:             document.getElementById('bizName').value.trim(),
+      desc:             document.getElementById('bizDesc').value.trim(),
+      city:             document.getElementById('bizCity')?.value.trim() || '',
+      address:          document.getElementById('bizAddress')?.value.trim() || '',
+      regions:          [...document.querySelectorAll('#regionGrid .region-chip.selected')].map(c => c.textContent.trim()),
+      websiteOnline:    document.getElementById('bizWebsiteStep2')?.value.trim() || '',
+      phone:            document.getElementById('bizPhone').value.trim(),
+      whatsapp:         document.getElementById('bizWhatsapp').value.trim(),
+      serviceEmail:     document.getElementById('bizServiceEmail').value.trim(),
+
+      // קטגוריה
+      categoryPrimary:  document.querySelector('#categoryGrid .cat-pill.primary')?.dataset.cat || '',
+      categorySecondary:[...document.querySelectorAll('#categoryGrid .cat-pill.secondary')].map(c => c.dataset.cat),
+
+      // הטבה
+      hasDiscount:      document.getElementById('hasDiscount').checked,
+      discountText:     document.getElementById('discountText').value.trim(),
+      discountType:     document.getElementById('discountType').value,
+      discountCode:     document.getElementById('discountCode').value.trim(),
+
+      // שעות + רשתות
+      hours:            document.getElementById('bizHours').value.trim(),
+      instagram:        document.getElementById('bizInstagram').value.trim(),
+      facebook:         document.getElementById('bizFacebook').value.trim(),
+      website:          document.getElementById('bizWebsite').value.trim(),
+
+      // מטא
+      status:           'pending',
+      submittedAt:      serverTimestamp(),
+    };
+
+    try {
+      await addDoc(collection(db, 'businesses'), data);
+    } catch(e) {
+      console.error('Firebase error:', e);
+    }
+
+    document.getElementById('mainCard').querySelectorAll('.step-panel').forEach(p => p.style.display = 'none');
+    document.getElementById('stepperBar').style.display = 'none';
+    document.getElementById('successState').style.display = 'block';
+  }
+
+  // חשיפת פונקציות לאירועים inline
+  window.handleSubmit        = handleSubmit;
+  window.goNext              = goNext;
+  window.goBack              = goBack;
+  window.handleBizSubscriber = handleBizSubscriber;
+  window.selectBizType       = selectBizType;
+  window.toggleRegion        = toggleRegion;
+  window.toggleCat           = toggleCat;
+  window.toggleDiscount      = toggleDiscount;
+  window.handleDiscountType  = handleDiscountType;
+  window.previewImages       = previewImages;
+  window.toggleDayClosed     = toggleDayClosed;
+
+  // ── BIZ TYPE (multi, max 2) ──
+  const selectedBizTypes = new Set();
+
+  function selectBizType(type) {
+    if (selectedBizTypes.has(type)) {
+      selectedBizTypes.delete(type);
+      document.querySelector(`.biz-type-card[data-type="${type}"]`).classList.remove('selected');
+    } else {
+      if (selectedBizTypes.size >= 2) return;
+      selectedBizTypes.add(type);
+      document.querySelector(`.biz-type-card[data-type="${type}"]`).classList.add('selected');
+    }
+
+    const hasPhysical = selectedBizTypes.has('physical');
+    const hasOnline   = selectedBizTypes.has('online');
+    const hasPro      = selectedBizTypes.has('pro');
+
+    document.getElementById('wrap-bizCity').style.display    = hasPhysical ? 'block' : 'none';
+    document.getElementById('wrap-bizAddress').style.display = hasPhysical ? 'block' : 'none';
+    document.getElementById('wrap-bizWebsiteStep2').style.display = hasOnline ? 'block' : 'none';
+    document.getElementById('wrap-bizRegions').style.display = hasPro ? 'block' : 'none';
+
+    const err = document.getElementById('err-bizType');
+    if (err && selectedBizTypes.size > 0) err.style.display = 'none';
+  }
+
+  // ── REGION CHIPS ──
+  function toggleRegion(el) {
+    el.classList.toggle('selected');
+    const err = document.getElementById('err-bizRegions');
+    if (document.querySelectorAll('#regionGrid .region-chip.selected').length > 0)
+      err.style.display = 'none';
+  }
+
+  // ── CATEGORIES (primary → secondary → off) ──
+  function toggleCat(el) {
+    const pills = document.querySelectorAll('#categoryGrid .cat-pill');
+    const primaryCount   = document.querySelectorAll('#categoryGrid .cat-pill.primary').length;
+    const secondaryCount = document.querySelectorAll('#categoryGrid .cat-pill.secondary').length;
+
+    if (!el.classList.contains('primary') && !el.classList.contains('secondary')) {
+      // off → primary (only if no primary yet)
+      if (primaryCount === 0) {
+        el.classList.add('primary');
+      } else if (secondaryCount < 2) {
+        // off → secondary
+        el.classList.add('secondary');
+      }
+    } else if (el.classList.contains('primary')) {
+      // primary → off
+      el.classList.remove('primary');
+    } else if (el.classList.contains('secondary')) {
+      // secondary → off
+      el.classList.remove('secondary');
+    }
+
+    // clear category error if primary exists
+    if (document.querySelector('#categoryGrid .cat-pill.primary')) {
+      const err = document.getElementById('err-category');
+      if (err) err.style.display = 'none';
+    }
+  }
+
+  // ── DISCOUNT ──
+  function toggleDiscount() {
+    const cb      = document.getElementById('hasDiscount');
+    const details = document.getElementById('discountDetails');
+    cb.checked = !cb.checked;
+    details.style.display = cb.checked ? 'block' : 'none';
+    if (!cb.checked) {
+      document.getElementById('onlineFields').style.display  = 'none';
+      document.getElementById('physicalNote').style.display  = 'none';
+      document.getElementById('discountType').value = '';
+    }
+  }
+
+  function handleDiscountType(val) {
+    document.getElementById('onlineFields').style.display  = val === 'online'   ? 'block' : 'none';
+    document.getElementById('physicalNote').style.display  = val === 'physical' ? 'block' : 'none';
+    if (val !== 'online') {
+      document.getElementById('discountCode')?.classList.remove('error');
+      const e = document.getElementById('err-discountCode');
+      if (e) e.style.display = 'none';
+    }
+  }
+
+  // ── HOURS ──
+  const DAYS = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+  function buildHoursRows() {
+    const container = document.getElementById('hoursRows');
+    container.innerHTML = DAYS.map((day, i) => `
+      <div class="hours-row">
+        <div class="day-label">${day}</div>
+        <div class="hours-inputs" id="hrs-inputs-${i}">
+          <input type="time" id="hrs-from-${i}" value="09:00" />
+          <span>עד</span>
+          <input type="time" id="hrs-to-${i}" value="18:00" />
+          <label class="closed-label">
+            <input type="checkbox" id="hrs-closed-${i}" onchange="toggleDayClosed(${i})" />
+            סגור
+          </label>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleDayClosed(i) {
+    const closed = document.getElementById('hrs-closed-' + i).checked;
+    const from   = document.getElementById('hrs-from-' + i);
+    const to     = document.getElementById('hrs-to-' + i);
+    from.disabled = closed;
+    to.disabled   = closed;
+    from.style.opacity = closed ? '.35' : '1';
+    to.style.opacity   = closed ? '.35' : '1';
+  }
+
+  function toggleHours() {
+    const cb    = document.getElementById('hasHours');
+    const table = document.getElementById('hoursTable');
+    cb.checked  = !cb.checked;
+    if (cb.checked) {
+      table.style.display = 'block';
+      if (!document.getElementById('hrs-from-0')) buildHoursRows();
+    } else {
+      table.style.display = 'none';
+    }
+  }
+
+  // ── FAN VERIFICATION ──
+  function handleBizSubscriber(val) {
+    document.getElementById('bizSubscriberFields').style.display = val === 'yes' ? 'block' : 'none';
+    document.getElementById('bizNonSubFields').style.display     = val === 'no'  ? 'block' : 'none';
+  }
+
+  // ── IMAGE PREVIEW ──
+  function previewImages(inputId, previewId, maxCount) {
+    const input   = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    preview.innerHTML = '';
+    const files = Array.from(input.files).slice(0, maxCount);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'preview-thumb';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
+
+</body>
+</html>

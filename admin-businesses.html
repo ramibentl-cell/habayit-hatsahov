@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הבית הצהוב – ניהול עסקים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,61,165,.2); border-radius: 10px; }
+
+    :root {
+      --yellow:     #FFD700;
+      --yellow-dark:#E6C200;
+      --blue:       #003DA5;
+      --blue-dark:  #002a75;
+      --blue-mid:   #1a56c4;
+      --white:      #FFFFFF;
+      --bg:         #F0F3FA;
+      --gray:       #888;
+      --green:      #16a34a;
+      --green-bg:   #dcfce7;
+      --orange:     #d97706;
+      --orange-bg:  #fef3c7;
+      --slate:      #64748b;
+      --slate-bg:   #f1f5f9;
+      --radius:     14px;
+      --shadow:     0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: #1a1a1a;
+      min-height: 100dvh;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: background .15s, color .15s;
+      white-space: nowrap;
+    }
+
+    .back-btn:hover { background: rgba(255,255,255,.12); color: var(--white); }
+
+    .topbar-title { flex: 1; color: var(--white); font-size: 17px; font-weight: 800; }
+    .topbar-title span { color: var(--yellow); }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+
+    /* ── STATS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-card .num { font-size: 32px; font-weight: 900; color: var(--blue); line-height: 1; }
+    .stat-card .lbl { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .stat-card.pending  .num { color: var(--orange); }
+    .stat-card.approved .num { color: var(--green); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 2px solid #e2e8f0;
+      background: var(--white);
+      font-family: 'Heebo', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+    .search-box {
+      flex: 1;
+      min-width: 160px;
+      padding: 7px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 13px;
+      outline: none;
+      background: var(--white);
+    }
+
+    .search-box:focus { border-color: var(--blue); }
+
+    /* ── BIZ CARD ── */
+    .biz-card {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 6px;
+      overflow: hidden;
+      border-right: 4px solid transparent;
+      transition: border-color .2s;
+    }
+
+    .biz-card.pending  { border-right-color: var(--orange); }
+    .biz-card.approved { border-right-color: var(--green); }
+    .biz-card.rejected { border-right-color: #cbd5e1; opacity: .6; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .biz-avatar {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-dark));
+      color: var(--blue-dark);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-info { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+    .card-name { font-size: 14px; font-weight: 700; white-space: nowrap; }
+    .card-meta { font-size: 12px; color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .chip.fresh    { background: #dcfce7; color: #15803d; }
+    .chip.medium   { background: var(--orange-bg); color: var(--orange); }
+    .chip.long     { background: #fee2e2; color: #b45309; }
+    .chip.approved { background: var(--green-bg); color: var(--green); }
+    .chip.rejected { background: var(--slate-bg); color: var(--slate); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .pill.sub      { background: #dbeafe; color: #1d4ed8; }
+    .pill.nosub    { background: #f0fdf4; color: #15803d; }
+    .pill.cat      { background: #EEF3FF; color: var(--blue); }
+    .pill.discount { background: #FEF9C3; color: #854D0E; }
+    .pill.nodiscount { background: var(--slate-bg); color: var(--slate); }
+
+    .chevron { color: #cbd5e1; font-size: 16px; transition: transform .2s; flex-shrink: 0; }
+
+    /* ── CARD BODY ── */
+    .card-body { display: none; padding: 0 18px 18px; border-top: 1px solid #f1f5f9; }
+    .card-body.open { display: block; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+      margin: 16px 0;
+    }
+
+    .detail-item .lbl { font-size: 11px; color: var(--gray); font-weight: 500; margin-bottom: 2px; }
+    .detail-item .val { font-size: 14px; font-weight: 600; word-break: break-all; }
+    .detail-item.full { grid-column: 1 / -1; }
+    .detail-item .val.desc { font-weight: 400; font-size: 13px; line-height: 1.5; }
+
+    .cat-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: #EEF3FF;
+      color: var(--blue);
+      margin: 2px 2px 0 0;
+    }
+
+    .discount-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: #FEF9C3;
+      color: #854D0E;
+    }
+
+    .ver-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .ver-tag.subscriber { background: #dbeafe; color: #1d4ed8; }
+    .ver-tag.photo      { background: #f0fdf4; color: #15803d; }
+
+    /* ── ACTIONS ── */
+    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Heebo', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:active { transform: scale(.97); }
+
+    .btn-approve { background: linear-gradient(135deg, #16a34a, #15803d); color: var(--white); box-shadow: 0 4px 12px rgba(22,163,74,.3); }
+    .btn-reject  { background: var(--slate-bg); color: var(--slate); }
+    .btn-wa      { background: linear-gradient(135deg, #25D366, #128C7E); color: var(--white); box-shadow: 0 4px 12px rgba(37,211,102,.3); }
+    .btn-mail    { background: linear-gradient(135deg, var(--blue), var(--blue-mid)); color: var(--white); box-shadow: 0 4px 12px rgba(0,61,165,.25); }
+    .btn-undo    { background: var(--slate-bg); color: var(--slate); font-size: 12px; flex: none; min-width: auto; padding: 8px 12px; }
+
+    /* ── EMPTY ── */
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--gray); }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      padding: 28px 24px 40px;
+      width: 100%;
+      max-width: 520px;
+      animation: slideUp .3s ease;
+    }
+
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .modal h3 { font-size: 20px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .modal-sub { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+    .modal-label { font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 6px; margin-top: 14px; }
+
+    .msg-preview {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #374151;
+      white-space: pre-wrap;
+    }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a1a1a;
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 999;
+      transition: transform .3s cubic-bezier(.17,.67,.46,1.3);
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back-btn" href="admin.html">› חזרה</a>
+  <div class="topbar-title">🏪 ניהול <span>עסקים</span></div>
+</header>
+
+<div class="page">
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="num" id="statTotal">0</div>
+      <div class="lbl">עסקים נרשמו</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="num" id="statPending">0</div>
+      <div class="lbl">ממתינים לאישור</div>
+    </div>
+    <div class="stat-card approved">
+      <div class="num" id="statApproved">0</div>
+      <div class="lbl">עסקים פעילים</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-val="all">הכל</button>
+    <button class="filter-btn" data-val="pending">ממתינים</button>
+    <button class="filter-btn" data-val="approved">מאושרים</button>
+    <button class="filter-btn" data-val="rejected">נדחו</button>
+    <input class="search-box" type="search" id="searchInput" placeholder="🔍  חיפוש שם עסק / בעלים..." />
+  </div>
+
+  <div id="bizList"></div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="approveModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>✅ אישור עסק</h3>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="modal-label">הודעת WhatsApp</div>
+    <div class="msg-preview" id="waPreview"></div>
+    <div class="modal-label">תוכן המייל</div>
+    <div class="msg-preview" id="mailPreview"></div>
+    <div class="modal-actions">
+      <button class="btn btn-approve" id="confirmBtn" style="flex:2">שלח ואשר ✓</button>
+      <button class="btn btn-reject" onclick="closeModal()" style="flex:1">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { db } from './firebase-config.js';
+import {
+  collection, onSnapshot, doc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+let businesses   = [];
+let activeFilter = 'all';
+let pendingId    = null;
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+function nowStr() {
+  return new Date().toLocaleDateString('he-IL') + ' ' +
+         new Date().toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit' });
+}
+
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const ms = ts.toDate ? Date.now() - ts.toDate() : Date.now() - new Date(ts);
+  const m = Math.floor(ms / 60000);
+  if (m < 60)   return m + ' דק\'';
+  if (m < 1440) return Math.floor(m/60) + ' שע\'';
+  return Math.floor(m/1440) + ' ימים';
+}
+
+function waitingChip(ts) {
+  if (!ts) return '<span class="chip fresh">🟢 חדש</span>';
+  const hrs = (Date.now() - ts.toDate()) / 3600000;
+  const [cls, icon] = hrs < 6 ? ['fresh','🟢'] : hrs < 24 ? ['medium','🟠'] : ['long','🔴'];
+  return `<span class="chip ${cls}">${icon} ממתין ${timeAgo(ts)}</span>`;
+}
+
+function statusChip(b) {
+  if (b.status === 'approved') return `<span class="chip approved">✓ אושר</span>`;
+  if (b.status === 'rejected') return `<span class="chip rejected">✗ נדחה</span>`;
+  return waitingChip(b.submittedAt);
+}
+
+function verTag(b) {
+  return b.isSubscriber === 'yes'
+    ? `<span class="ver-tag subscriber">מנוי שער ${b.gate} · #${b.subNum}</span>`
+    : `<span class="ver-tag photo">לא מנוי · יש תמונה</span>`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function toggleCard(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const open = body.classList.toggle('open');
+  chev.style.transform = open ? 'rotate(90deg)' : '';
+}
+window.toggleCard = toggleCard;
+
+// ── stats ─────────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statTotal').textContent    = businesses.length;
+  document.getElementById('statPending').textContent  = businesses.filter(b => b.status === 'pending').length;
+  document.getElementById('statApproved').textContent = businesses.filter(b => b.status === 'approved').length;
+}
+
+// ── render ────────────────────────────────────────────────────────────────────
+function render() {
+  const search   = document.getElementById('searchInput').value.trim().toLowerCase();
+  const filtered = businesses.filter(b => {
+    const matchF = activeFilter === 'all' || b.status === activeFilter;
+    const matchS = !search ||
+      (b.name || '').toLowerCase().includes(search) ||
+      (b.ownerFirst + ' ' + b.ownerLast).toLowerCase().includes(search);
+    return matchF && matchS;
+  });
+
+  updateStats();
+  const list = document.getElementById('bizList');
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>לא נמצאו עסקים</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(b => {
+    const ownerName = `${b.ownerFirst || ''} ${b.ownerLast || ''}`.trim();
+    const cats = b.categoryPrimary ? [b.categoryPrimary, ...(b.categorySecondary || [])] : [];
+    const catTags = cats.map(c => `<span class="cat-tag">${c}</span>`).join('') || '—';
+
+    const subPill = b.isSubscriber === 'yes'
+      ? `<span class="pill sub">מנוי</span>`
+      : `<span class="pill nosub">לא מנוי</span>`;
+
+    const actions = b.status === 'pending' ? `
+      <div class="card-actions">
+        <button class="btn btn-approve" onclick="openModal('${b.id}')">✅ אשר עסק</button>
+        <button class="btn btn-reject"  onclick="rejectBiz('${b.id}')">✗ דחה</button>
+      </div>`
+    : b.status === 'approved' ? `
+      <div class="card-actions">
+        <button class="btn btn-wa"   onclick="sendWA('${b.id}')">📲 WhatsApp</button>
+        <button class="btn btn-mail" onclick="sendMail('${b.id}')">✉️ מייל</button>
+        <button class="btn btn-undo" onclick="rejectBiz('${b.id}')">↩ בטל אישור</button>
+      </div>`
+    : `<div class="card-actions">
+        <button class="btn btn-approve" onclick="openModal('${b.id}')">↩ אשר בכל זאת</button>
+      </div>`;
+
+    return `
+    <div class="biz-card ${b.status}">
+      <div class="card-header" onclick="toggleCard('${b.id}')">
+        <div class="biz-avatar">🏪</div>
+        <div class="card-info">
+          <div class="card-name">${b.name || '—'}</div>
+          <div class="card-meta">${b.city || b.address || 'אונליין'}</div>
+        </div>
+        ${subPill}
+        ${statusChip(b)}
+        <span class="chevron" id="chev-${b.id}">›</span>
+      </div>
+      <div class="card-body" id="body-${b.id}">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="lbl">בעלים</div>
+            <div class="val">${ownerName || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">טלפון</div>
+            <div class="val">${b.ownerPhone || b.phone || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">אימייל</div>
+            <div class="val">${b.ownerEmail || b.email || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">עיר</div>
+            <div class="val">${b.city || '—'}</div>
+          </div>
+          <div class="detail-item full">
+            <div class="lbl">תיאור</div>
+            <div class="val desc">${b.desc || '—'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">קטגוריה</div>
+            <div class="val">${catTags}</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">הטבה</div>
+            <div class="val">${b.hasDiscount ? `<span class="discount-tag">💛 ${b.discountText}</span>` : '—'}</div>
+          </div>
+          <div class="detail-item full">
+            <div class="lbl">אימות אוהד</div>
+            <div class="val">${verTag(b)}</div>
+          </div>
+        </div>
+        ${actions}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── filter + search ───────────────────────────────────────────────────────────
+document.querySelector('.filter-bar').addEventListener('click', e => {
+  const btn = e.target.closest('[data-val]');
+  if (!btn) return;
+  activeFilter = btn.dataset.val;
+  document.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+});
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+// ── modal ─────────────────────────────────────────────────────────────────────
+function buildWA(b) {
+  const name = `${b.ownerFirst || ''} ${b.ownerLast || ''}`.trim();
+  return `היי ${name} 👋\nברוך הבא לבית הצהוב! 💛\n\nהעסק שלך "${b.name}" אושר לאינדקס.\n\n🔗 קישור לאתר: [יוכנס בקרוב]\n\nביחד ננצח 🏆`;
+}
+
+function buildMail(b) {
+  const name = `${b.ownerFirst || ''} ${b.ownerLast || ''}`.trim();
+  return `שלום ${name},\n\nשמחים לבשר שהעסק "${b.name}" אושר לאינדקס הבלעדי שלנו!\n\nפרטי העסק יופיעו בקרוב באתר.\n\nבאהבה,\nצוות הבית הצהוב 💛`;
+}
+
+window.openModal = function(id) {
+  pendingId = id;
+  const b = businesses.find(x => x.id === id);
+  const ownerName = `${b.ownerFirst || ''} ${b.ownerLast || ''}`.trim();
+  document.getElementById('modalSub').textContent   = `${b.name} · ${ownerName}`;
+  document.getElementById('waPreview').textContent   = buildWA(b);
+  document.getElementById('mailPreview').textContent = buildMail(b);
+  document.getElementById('approveModal').classList.add('open');
+};
+
+window.closeModal = function() {
+  document.getElementById('approveModal').classList.remove('open');
+  pendingId = null;
+};
+
+document.getElementById('confirmBtn').addEventListener('click', async () => {
+  const b = businesses.find(x => x.id === pendingId);
+  await updateDoc(doc(db, 'businesses', pendingId), {
+    status: 'approved',
+    approvedAt: serverTimestamp()
+  });
+  closeModal();
+  sendWA(pendingId);
+  showToast(`✅ "${b.name}" אושר!`);
+});
+
+window.rejectBiz = async function(id) {
+  const b = businesses.find(x => x.id === id);
+  if (b.status === 'approved') {
+    if (!confirm(`לבטל אישור של "${b.name}"?`)) return;
+    await updateDoc(doc(db, 'businesses', id), { status: 'pending', approvedAt: null });
+    showToast(`↩ אישור בוטל — "${b.name}" חזר להמתנה`);
+  } else {
+    if (!confirm(`לדחות את "${b.name}"?`)) return;
+    await updateDoc(doc(db, 'businesses', id), { status: 'rejected', rejectedAt: serverTimestamp() });
+    showToast('העסק נדחה');
+  }
+};
+
+window.sendWA = function(id) {
+  const b  = businesses.find(x => x.id === id);
+  const ph = (b.ownerPhone || b.phone || '').replace(/\D/g,'');
+  window.open(`https://wa.me/${ph.startsWith('0') ? '972'+ph.slice(1) : ph}?text=${encodeURIComponent(buildWA(b))}`, '_blank');
+};
+
+window.sendMail = function(id) {
+  const b = businesses.find(x => x.id === id);
+  window.open(`mailto:${b.ownerEmail || b.email}?subject=${encodeURIComponent('העסק שלך אושר לאינדקס הבית הצהוב 💛')}&body=${encodeURIComponent(buildMail(b))}`, '_blank');
+};
+
+// ── Firestore listener ────────────────────────────────────────────────────────
+const list = document.getElementById('bizList');
+list.innerHTML = `<div class="empty-state"><div class="icon">⏳</div><p>טוען נתונים...</p></div>`;
+
+onSnapshot(collection(db, 'businesses'), snapshot => {
+  businesses = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+});
+</script>
+
+<!-- DEV ONLY -->
+<div id="_devBar" style="position:fixed;top:70px;left:8px;z-index:9999;">
+  <a href="/" style="background:#002a75;color:#FFD700;border:1.5px solid #FFD700;border-radius:20px;padding:6px 12px;font-family:'Heebo',sans-serif;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap;">← תפריט</a>
+</div>
+</body>
+</html>

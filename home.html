@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>הבית הצהוב – אינדקס</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --yellow:    #FFD700;
+      --yellow-dk: #E6C200;
+      --blue:      #003DA5;
+      --blue-dk:   #002a75;
+      --blue-md:   #1a56c4;
+      --white:     #FFFFFF;
+      --bg:        #F5F6FA;
+      --card-bg:   #FFFFFF;
+      --gray:      #888;
+      --gray-lt:   #f0f1f5;
+      --text:      #1a1a1a;
+      --text-sm:   #555;
+      --green:     #1DB954;
+      --radius:    14px;
+      --shadow:    0 2px 12px rgba(0,0,0,0.08);
+      --shadow-md: 0 6px 24px rgba(0,0,0,0.11);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; padding-bottom: 24px; }
+    ::-webkit-scrollbar { width: 0; }
+
+    /* ══ TOP NAV ══ */
+    .top-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--blue-dk);
+      padding: 12px 16px 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
+    .nav-row1 {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; }
+    .nav-logo-text { color: var(--white); font-size: 18px; font-weight: 900; }
+    .nav-logo-text span { color: var(--yellow); }
+    .nav-card-btn {
+      background: rgba(255,215,0,.15);
+      border: 1.5px solid rgba(255,215,0,.4);
+      color: var(--yellow);
+      font-size: 12px; font-weight: 700;
+      padding: 5px 12px; border-radius: 20px;
+      cursor: pointer; font-family: 'Heebo', sans-serif;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .search-bar {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,.1);
+      border-radius: 12px; padding: 9px 14px; gap: 8px;
+    }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: var(--white); font-family: 'Heebo', sans-serif;
+      font-size: 14px; width: 100%;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,.45); }
+    .search-icon { color: rgba(255,255,255,.45); font-size: 16px; }
+
+    /* ══ GREETING ══ */
+    .greeting {
+      padding: 18px 16px 0;
+    }
+    .greeting h2 { font-size: 22px; font-weight: 900; }
+    .greeting h2 span { color: var(--blue); }
+    .greeting p { color: var(--text-sm); font-size: 14px; margin-top: 2px; }
+
+    /* ══ CATEGORIES ══ */
+    .section { padding: 20px 16px 0; }
+    .section-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 18px; font-weight: 800; color: var(--text);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .section-title .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--yellow); display: inline-block;
+    }
+    .see-all {
+      color: var(--blue); font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .cat-item {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .cat-circle {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      transition: transform .15s, box-shadow .15s;
+      border: 2px solid transparent;
+    }
+    .cat-item.active .cat-circle {
+      border-color: var(--blue);
+      background: #EEF3FF;
+      box-shadow: 0 4px 14px rgba(0,61,165,.2);
+    }
+    .cat-item:active .cat-circle { transform: scale(.93); }
+    .cat-label {
+      font-size: 11px; font-weight: 600;
+      color: var(--text-sm); text-align: center; line-height: 1.2;
+    }
+    .cat-item.active .cat-label { color: var(--blue); }
+
+    /* ══ HORIZONTAL SCROLL CARDS ══ */
+    .cards-scroll {
+      display: flex; gap: 12px;
+      overflow-x: auto; padding-bottom: 4px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cards-scroll::-webkit-scrollbar { display: none; }
+
+    /* ══ BUSINESS CARD ══ */
+    .biz-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 185px;
+      max-width: 185px;
+      overflow: hidden;
+      cursor: pointer;
+      scroll-snap-align: start;
+      transition: transform .15s, box-shadow .15s;
+      position: relative;
+    }
+    .biz-card:active { transform: scale(.97); box-shadow: var(--shadow-md); }
+
+    .biz-card-img {
+      width: 100%; height: 100px;
+      background: linear-gradient(135deg, #EEF3FF, #dce8ff);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .biz-logo {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Heebo', sans-serif;
+      font-size: 22px; font-weight: 900;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,.15);
+      letter-spacing: -1px;
+    }
+
+    .biz-badge {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--blue);
+      color: var(--yellow);
+      font-size: 11px; font-weight: 800;
+      padding: 3px 9px; border-radius: 20px;
+    }
+    .biz-badge.new-badge {
+      background: var(--yellow);
+      color: var(--blue-dk);
+    }
+    .biz-badge.online-badge {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .biz-card-body { padding: 10px 12px 12px; }
+    .biz-card-name { font-size: 15px; font-weight: 800; color: var(--text); }
+    .biz-card-cat  { font-size: 12px; color: var(--gray); margin-top: 2px; }
+
+    .biz-discount {
+      margin-top: 8px;
+      background: #FFF8E1;
+      border: 1.5px solid #FFE082;
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .biz-discount-icon { font-size: 14px; }
+    .biz-discount-text { font-size: 12px; font-weight: 700; color: #7a5c00; line-height: 1.3; }
+
+    .biz-city {
+      margin-top: 7px;
+      font-size: 11px; color: var(--gray);
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    /* ══ GRID CARDS (for category view) ══ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .cards-grid .biz-card {
+      min-width: unset; max-width: unset;
+      width: 100%;
+    }
+
+    /* ══ SECTION DIVIDER ══ */
+    .section-divider {
+      height: 8px; background: var(--gray-lt);
+      margin: 22px 0 0;
+    }
+
+    /* ══ POPULAR RANK ══ */
+    .rank-badge {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0,0,0,.55);
+      color: var(--white);
+      font-size: 11px; font-weight: 800;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ══ LOCATION BANNER ══ */
+    .location-banner {
+      margin: 0 16px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-md));
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+    }
+    .location-banner-icon { font-size: 28px; }
+    .location-banner-text h4 { color: var(--white); font-size: 14px; font-weight: 800; }
+    .location-banner-text p { color: rgba(255,255,255,.65); font-size: 12px; margin-top: 2px; }
+    .location-banner-arrow { color: var(--yellow); font-size: 20px; margin-right: auto; }
+
+    /* ══ BOTTOM NAV ══ */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--white);
+      border-top: 1px solid #E8EDF5;
+      display: flex; padding: 8px 0 12px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,.08);
+    }
+    .bottom-nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 3px; cursor: pointer;
+    }
+    .bottom-nav-icon { font-size: 22px; }
+    .bottom-nav-label { font-size: 10px; font-weight: 600; color: var(--gray); }
+    .bottom-nav-item.active .bottom-nav-label { color: var(--blue); }
+    .bottom-nav-item.active .bottom-nav-icon { filter: none; }
+
+    /* ══ EMPTY CATEGORY ══ */
+    .empty-cat {
+      text-align: center; padding: 40px 20px;
+      color: var(--gray); font-size: 14px;
+    }
+    .empty-cat .icon { font-size: 40px; margin-bottom: 10px; }
+
+    /* ══ ONLINE TAG ══ */
+    .online-tag {
+      display: inline-block;
+      background: #E8F8EF; color: var(--green);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 6px;
+      margin-top: 4px;
+    }
+
+    /* ══ BIZ MODAL ══ */
+    .biz-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(2px);
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .biz-overlay.open { display: flex; }
+
+    .biz-sheet {
+      background: var(--white);
+      width: 100%;
+      max-width: 520px; /* desktop: חלון מרכזי */
+      max-height: 88dvh;
+      border-radius: 24px 24px 0 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      animation: sheetUp .3s cubic-bezier(.25,.46,.45,.94);
+      position: relative;
+    }
+
+    /* Desktop — חלון מרכזי */
+    @media (min-width: 600px) {
+      .biz-overlay { align-items: center; }
+      .biz-sheet {
+        border-radius: 24px;
+        max-height: 85vh;
+        margin-bottom: 0;
+        box-shadow: 0 24px 60px rgba(0,0,0,.3);
+      }
+    }
+
+    @keyframes sheetUp {
+      from { transform: translateY(100%); opacity: .5; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .sheet-handle {
+      width: 40px; height: 4px;
+      background: #E2E8F0; border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    @media (min-width: 600px) { .sheet-handle { display: none; } }
+
+    .sheet-close {
+      position: absolute; top: 14px; left: 16px;
+      width: 32px; height: 32px;
+      background: #F1F5F9; border-radius: 50%;
+      border: none; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #64748B;
+    }
+
+    .sheet-hero {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+
+    .sheet-logo {
+      width: 72px; height: 72px; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Heebo', sans-serif;
+      font-size: 28px; font-weight: 900; color: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    }
+
+    .sheet-content { padding: 16px 20px 32px; }
+
+    .sheet-name {
+      font-size: 22px; font-weight: 900; color: #1a1a1a;
+    }
+
+    .sheet-meta {
+      display: flex; align-items: center;
+      gap: 10px; flex-wrap: wrap; margin-top: 8px;
+    }
+
+    .sheet-tag {
+      font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .sheet-tag.cat    { background: #EEF3FF; color: var(--blue); }
+    .sheet-tag.online { background: #E8F8EF; color: #16a34a; }
+    .sheet-tag.city   { color: var(--gray); font-weight: 400; }
+
+    .sheet-desc {
+      font-size: 14px; color: #555;
+      line-height: 1.7; margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #F1F5F9;
+    }
+
+    /* benefit */
+    .sheet-benefit {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #FFF8E1, #FFFDE7);
+      border: 2px solid #FFE082;
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .sheet-benefit-label {
+      font-size: 11px; font-weight: 700;
+      color: var(--orange); letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+    .sheet-benefit-text {
+      font-size: 16px; font-weight: 800; color: #1a1a1a;
+    }
+    .sheet-benefit-type {
+      font-size: 12px; color: var(--gray); margin-top: 4px;
+    }
+
+    /* coupon */
+    .sheet-reveal-btn {
+      width: 100%; margin-top: 12px;
+      background: var(--blue);
+      color: var(--white); border: none;
+      border-radius: 12px; padding: 14px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px; font-weight: 800;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+
+    .sheet-coupon-box {
+      display: none; margin-top: 10px;
+      background: var(--blue-dk);
+      border-radius: 12px; padding: 16px;
+      text-align: center;
+      animation: popIn .3s cubic-bezier(.17,.67,.46,1.3);
+    }
+    .coupon-lbl  { color: rgba(255,255,255,.55); font-size: 11px; letter-spacing: 1px; margin-bottom: 6px; }
+    .coupon-code { color: var(--yellow); font-size: 28px; font-weight: 900; letter-spacing: 3px; font-family: monospace; }
+    .copy-btn {
+      margin-top: 10px;
+      background: rgba(255,215,0,.15);
+      border: 1px solid rgba(255,215,0,.3);
+      color: var(--yellow); border-radius: 8px;
+      padding: 8px 16px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .copy-btn.copied { background: #dcfce7; border-color: #16a34a; color: #16a34a; }
+
+    .sheet-physical-box {
+      display: none; margin-top: 10px;
+      background: var(--blue-dk);
+      border-radius: 12px; padding: 18px;
+      text-align: center;
+      animation: popIn .3s cubic-bezier(.17,.67,.46,1.3);
+    }
+    .sheet-physical-box h4 { color: #fff; font-size: 15px; font-weight: 800; margin: 8px 0; }
+    .sheet-physical-box p  { color: rgba(255,255,255,.6); font-size: 13px; line-height: 1.6; }
+    .sheet-physical-box a  {
+      display: inline-block; margin-top: 12px;
+      background: var(--yellow); color: var(--blue-dk);
+      border-radius: 10px; padding: 9px 20px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 14px; font-weight: 800; text-decoration: none;
+    }
+
+    .sheet-clicks { font-size: 12px; color: var(--gray); text-align: center; margin-top: 8px; }
+
+    /* social */
+    .sheet-social { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .sheet-social a {
+      display: flex; align-items: center; gap: 6px;
+      background: #F8FAFF; border-radius: 8px;
+      padding: 8px 12px; text-decoration: none;
+      font-size: 13px; font-weight: 600; color: var(--blue);
+    }
+
+    /* bottom CTA */
+    .sheet-cta {
+      display: flex; gap: 10px; margin-top: 16px;
+      padding-top: 16px; border-top: 1px solid #F1F5F9;
+    }
+    .sheet-call {
+      flex: 1; background: #F1F5F9; border: none;
+      border-radius: 12px; padding: 13px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 14px; font-weight: 700; color: var(--blue); cursor: pointer;
+    }
+    .sheet-wa {
+      flex: 2;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      border: none; border-radius: 12px; padding: 13px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 14px; font-weight: 800; color: #fff; cursor: pointer;
+    }
+
+    @keyframes popIn { from{transform:scale(.9);opacity:0} to{transform:scale(1);opacity:1} }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ══ -->
+<header class="top-nav">
+  <div class="nav-row1">
+    <div class="nav-logo">
+      <svg width="22" height="25" viewBox="0 0 104 118" fill="none">
+        <g style="fill:#FFD700;">
+          <g transform="matrix(1.25,0,0,1.25,0,30.09)"><path d="M0,0 26,0 13,22.9Z"/></g>
+          <g transform="matrix(1.25,0,0,1.25,0.42,30.09)"><path d="M27.4,0 16.4,19.1 32.4,19.1 32.4,31.9 8.7,31.9 0,46.6 41.8,46.6 41.8,31.9 40.4,31.9 40.4,19.1Z"/></g>
+          <g transform="matrix(1.25,0,0,1.25,24.2,58.2)"><path d="M3.8,0A3.8,3.8,0,1,1,0,3.8A3.8,3.8,0,0,1,3.8,0Z"/></g>
+          <g transform="matrix(1.25,0,0,1.25,34.4,57.3)"><path d="M0.2,25.8 13.6,48.8 26.9,25.8 26.9,0 21.9,0 21.9,25.8Z"/></g>
+          <g transform="matrix(1.25,0,0,1.25,36.9,30)"><path d="M0.2,0 13.8,20 13.8,46.6 18.9,40.1 18.9,21 29.2,21 29.2,32.1 25.9,32.1 25.9,46.6 52.7,46.6 39.8,23.5 53.9,0 26.9,0 16,14 5.9,0Z"/></g>
+          <g transform="matrix(1.25,0,0,1.25,35.2,0)"><path d="M0,23.4 13.2,0 26.9,23.4 17.4,35.9 8.4,23.4Z"/></g>
+        </g>
+      </svg>
+      <div class="nav-logo-text">הבית <span>הצהוב</span></div>
+    </div>
+    <a href="/profile.html" class="nav-card-btn" style="text-decoration:none;">👤 פרופיל</a>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="חפש עסק, קטגוריה, שירות..." id="searchInput" oninput="handleSearch(this.value)"/>
+  </div>
+</header>
+
+<!-- ══ GREETING ══ -->
+<div class="greeting">
+  <h2>שלום, <span>ישראל</span> 👋</h2>
+  <p>מה מחפשים היום?</p>
+</div>
+
+<!-- ══ CATEGORIES ══ -->
+<div class="section" style="padding-top:16px;">
+  <div class="section-header">
+    <div class="section-title"><span class="dot"></span>קטגוריות</div>
+  </div>
+  <div class="cat-grid" id="catGrid">
+    <div class="cat-item active" onclick="filterCat('all',this)">
+      <div class="cat-circle">🏠</div>
+      <div class="cat-label">הכל</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('food',this)">
+      <div class="cat-circle">🍕</div>
+      <div class="cat-label">אוכל ושתייה</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('pro',this)">
+      <div class="cat-circle">🔧</div>
+      <div class="cat-label">בעלי מקצוע</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('fashion',this)">
+      <div class="cat-circle">👕</div>
+      <div class="cat-label">ביגוד ואופנה</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('health',this)">
+      <div class="cat-circle">💊</div>
+      <div class="cat-label">בריאות ויופי</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('finance',this)">
+      <div class="cat-circle">📊</div>
+      <div class="cat-label">פיננסים</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('tech',this)">
+      <div class="cat-circle">💻</div>
+      <div class="cat-label">טכנולוגיה</div>
+    </div>
+    <div class="cat-item" onclick="filterCat('legal',this)">
+      <div class="cat-circle">⚖️</div>
+      <div class="cat-label">משפטים</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN FEED (shown when no filter) ══ -->
+<div id="mainFeed">
+
+  <div class="section-divider"></div>
+
+  <!-- NEW BUSINESSES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title"><span class="dot"></span>חדש אצלנו 🆕</div>
+      <a class="see-all" onclick="filterCat('new',null)">הכל ›</a>
+    </div>
+    <div class="cards-scroll" id="newBizScroll"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- GREAT DEALS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title"><span class="dot"></span>הטבות שוות 💛</div>
+      <a class="see-all" onclick="filterCat('deals',null)">הכל ›</a>
+    </div>
+    <div class="cards-scroll" id="dealsBizScroll"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- MOST POPULAR -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title"><span class="dot"></span>הכי פופולריים 🔥</div>
+      <a class="see-all" onclick="filterCat('popular',null)">הכל ›</a>
+    </div>
+    <div class="cards-scroll" id="popularBizScroll"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ONLINE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title"><span class="dot"></span>קניה אונליין 🛒</div>
+      <a class="see-all" onclick="filterCat('online',null)">הכל ›</a>
+    </div>
+    <div class="cards-scroll" id="onlineBizScroll"></div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- NEAR YOU -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title"><span class="dot"></span>קרוב אליך 📍</div>
+    </div>
+    <div class="location-banner" id="locationBanner" onclick="requestLocation()">
+      <div class="location-banner-icon">📍</div>
+      <div class="location-banner-text">
+        <h4>רוצה תוצאות לפי מיקום?</h4>
+        <p>לחץ כדי לאפשר מיקום ונתאים עבורך</p>
+      </div>
+      <div class="location-banner-arrow">›</div>
+    </div>
+    <div class="cards-scroll" id="nearBizScroll" style="margin-top:12px;"></div>
+  </div>
+
+</div>
+
+<!-- ══ CATEGORY FILTER VIEW ══ -->
+<div id="catFeed" style="display:none;">
+  <div class="section" style="padding-top:16px;">
+    <div class="section-header">
+      <div class="section-title" id="catFeedTitle"></div>
+      <a class="see-all" onclick="filterCat('all',null); document.querySelector('.cat-item').classList.add('active')">הכל ›</a>
+    </div>
+    <div class="cards-grid" id="catFeedGrid"></div>
+  </div>
+</div>
+
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const businesses = [
+  {
+    id:1, name:'מאפיית הצהוב', cat:'food', city:'תל אביב',
+    icon:'🥐', discount:'10% על כל קנייה', discountType:'physical',
+    isNew:true, newUntil: daysFromNow(14),
+    popular:true, clicks:342, online:false,
+    lat:32.07, lng:34.78
+  },
+  {
+    id:2, name:'Studio D – עיצוב גרפי', cat:'tech', city:'רמת גן',
+    icon:'🎨', discount:'20% על פרויקט ראשון', discountType:'online',
+    coupon:'MACCABI20',
+    isNew:true, newUntil: daysFromNow(7),
+    popular:true, clicks:218, online:true,
+    lat:32.08, lng:34.81
+  },
+  {
+    id:3, name:'שיפוצים ובנייה – משה', cat:'pro', city:'פתח תקווה',
+    icon:'🔨', discount:'ייעוץ ראשוני חינם', discountType:'physical',
+    isNew:false,
+    popular:true, clicks:189, online:false,
+    lat:32.09, lng:34.89
+  },
+  {
+    id:4, name:'פארם פלוס', cat:'health', city:'תל אביב',
+    icon:'💊', discount:'15% על תוספי תזונה', discountType:'physical',
+    isNew:true, newUntil: daysFromNow(21),
+    popular:false, clicks:97, online:false,
+    lat:32.06, lng:34.77
+  },
+  {
+    id:5, name:'חנות הצהוב – מרצ\'נדייז', cat:'fashion', city:'אונליין',
+    icon:'👕', discount:'קנה 2 קבל 1', discountType:'online',
+    coupon:'BUY2GET1',
+    isNew:false,
+    popular:true, clicks:276, online:true,
+    lat:null, lng:null
+  },
+  {
+    id:6, name:'יוסי ביטוח', cat:'finance', city:'חולון',
+    icon:'🛡️', discount:'פגישת ייעוץ חינם', discountType:'physical',
+    isNew:true, newUntil: daysFromNow(10),
+    popular:false, clicks:54, online:false,
+    lat:32.01, lng:34.78
+  },
+  {
+    id:7, name:'עו"ד גיל לוי', cat:'legal', city:'תל אביב',
+    icon:'⚖️', discount:'שעת ייעוץ ראשונה ב-50%', discountType:'physical',
+    isNew:false,
+    popular:false, clicks:41, online:false,
+    lat:32.07, lng:34.79
+  },
+  {
+    id:8, name:'קפה הבית – מכבי', cat:'food', city:'גבעתיים',
+    icon:'☕', discount:'קפה שני ב-1 ₪', discountType:'physical',
+    isNew:false,
+    popular:true, clicks:401, online:false,
+    lat:32.07, lng:34.81
+  },
+  {
+    id:9, name:'TechFix – תיקון מכשירים', cat:'tech', city:'אונליין',
+    icon:'📱', discount:'10% על כל תיקון', discountType:'online',
+    coupon:'TECHFIX10',
+    isNew:false,
+    popular:false, clicks:113, online:true,
+    lat:null, lng:null
+  }
+];
+
+function daysFromNow(n) {
+  const d = new Date(); d.setDate(d.getDate() + n); return d;
+}
+
+function isNew(biz) {
+  return biz.isNew && biz.newUntil && new Date() < new Date(biz.newUntil);
+}
+
+// ── LOGO COLORS PER CATEGORY ─────────────────────────────────────────────────
+const catColors = {
+  food:    ['#FF6B35','#E85D04'],
+  pro:     ['#2563EB','#1D4ED8'],
+  fashion: ['#7C3AED','#6D28D9'],
+  health:  ['#059669','#047857'],
+  finance: ['#0284C7','#0369A1'],
+  tech:    ['#0891B2','#0E7490'],
+  legal:   ['#64748B','#475569'],
+};
+
+function bizInitials(name) {
+  const words = name.replace(/[–-]/g,' ').trim().split(/\s+/);
+  if (words.length === 1) return words[0].slice(0,2);
+  return words[0][0] + words[1][0];
+}
+
+function bizLogo(biz) {
+  const colors = catColors[biz.cat] || ['#003DA5','#002a75'];
+  const initials = bizInitials(biz.name);
+  return `<div class="biz-logo" style="background:linear-gradient(135deg,${colors[0]},${colors[1]})">${initials}</div>`;
+}
+
+// ── CARD BUILDER ─────────────────────────────────────────────────────────────
+function buildCard(biz, showRank) {
+  const newTag  = isNew(biz)   ? `<div class="biz-badge new-badge">✨ חדש</div>` : '';
+  const onlineTag = biz.online ? `<div class="biz-badge online-badge" style="top:8px;left:8px;">🌐 אונליין</div>` : '';
+  const rankTag = showRank     ? `<div class="rank-badge">#${showRank}</div>` : '';
+  const couponLine = ''; // מוצג רק בדף העסק
+
+  return `
+    <div class="biz-card" onclick="openBiz(${biz.id})">
+      <div class="biz-card-img">
+        ${bizLogo(biz)}
+        ${newTag}${onlineTag}${rankTag}
+      </div>
+      <div class="biz-card-body">
+        <div class="biz-card-name">${biz.name}</div>
+        <div class="biz-card-cat">${catLabel(biz.cat)}</div>
+        ${biz.discount ? `
+        <div class="biz-discount">
+          <div class="biz-discount-icon">💛</div>
+          <div>
+            <div class="biz-discount-text">${biz.discount}</div>
+            ${couponLine}
+          </div>
+        </div>` : ''}
+        <div class="biz-city">📍 ${biz.city}</div>
+      </div>
+    </div>`;
+}
+
+function catLabel(cat) {
+  return {food:'אוכל ושתייה',pro:'בעלי מקצוע',fashion:'ביגוד ואופנה',
+          health:'בריאות ויופי',finance:'פיננסים',tech:'טכנולוגיה',legal:'משפטים'}[cat] || cat;
+}
+
+function catIcon(cat) {
+  return {food:'🍕',pro:'🔧',fashion:'👕',health:'💊',finance:'📊',tech:'💻',legal:'⚖️',all:'🏠'}[cat] || '📦';
+}
+
+// ── RENDER SECTIONS ───────────────────────────────────────────────────────────
+function renderSections() {
+  // New
+  const newBiz = businesses.filter(b => isNew(b));
+  document.getElementById('newBizScroll').innerHTML =
+    newBiz.map(b => buildCard(b)).join('') ||
+    '<p style="color:#aaa;font-size:13px;padding:8px 0">בקרוב...</p>';
+
+  // Deals
+  const deals = businesses.filter(b => b.discount);
+  document.getElementById('dealsBizScroll').innerHTML =
+    deals.map(b => buildCard(b)).join('');
+
+  // Popular
+  const popular = [...businesses].sort((a,b) => b.clicks - a.clicks).slice(0,5);
+  document.getElementById('popularBizScroll').innerHTML =
+    popular.map((b,i) => buildCard(b, i+1)).join('');
+
+  // Online
+  const online = businesses.filter(b => b.online);
+  document.getElementById('onlineBizScroll').innerHTML =
+    online.map(b => buildCard(b)).join('');
+}
+
+// ── CATEGORY FILTER ───────────────────────────────────────────────────────────
+function filterCat(cat, el) {
+  // update active state
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  const main = document.getElementById('mainFeed');
+  const catV = document.getElementById('catFeed');
+
+  if (cat === 'all') {
+    main.style.display = 'block';
+    catV.style.display = 'none';
+    return;
+  }
+
+  main.style.display = 'none';
+  catV.style.display = 'block';
+
+  let filtered = [];
+  let title = '';
+
+  if (cat === 'new')     { filtered = businesses.filter(b => isNew(b));      title = '✨ חדש אצלנו'; }
+  else if (cat === 'deals')   { filtered = businesses.filter(b => b.discount);    title = '💛 הטבות שוות'; }
+  else if (cat === 'popular') { filtered = [...businesses].sort((a,b)=>b.clicks-a.clicks); title = '🔥 הכי פופולריים'; }
+  else if (cat === 'online')  { filtered = businesses.filter(b => b.online);      title = '🛒 קניה אונליין'; }
+  else { filtered = businesses.filter(b => b.cat === cat); title = catIcon(cat) + ' ' + catLabel(cat); }
+
+  document.getElementById('catFeedTitle').innerHTML = `<span class="dot"></span>${title}`;
+
+  if (!filtered.length) {
+    document.getElementById('catFeedGrid').innerHTML =
+      '<div class="empty-cat" style="grid-column:1/-1"><div class="icon">🔍</div><p>אין עסקים בקטגוריה זו עדיין</p></div>';
+  } else {
+    document.getElementById('catFeedGrid').innerHTML = filtered.map(b => buildCard(b)).join('');
+  }
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function handleSearch(val) {
+  if (!val.trim()) {
+    filterCat('all', document.querySelector('.cat-item'));
+    return;
+  }
+  const q = val.toLowerCase();
+  const found = businesses.filter(b =>
+    b.name.toLowerCase().includes(q) ||
+    catLabel(b.cat).includes(q) ||
+    b.city.includes(q)
+  );
+  document.getElementById('mainFeed').style.display = 'none';
+  document.getElementById('catFeed').style.display = 'block';
+  document.getElementById('catFeedTitle').innerHTML = `<span class="dot"></span>תוצאות חיפוש`;
+  document.getElementById('catFeedGrid').innerHTML = found.length
+    ? found.map(b => buildCard(b)).join('')
+    : '<div class="empty-cat" style="grid-column:1/-1"><div class="icon">🔍</div><p>לא נמצאו תוצאות</p></div>';
+}
+
+// ── LOCATION ──────────────────────────────────────────────────────────────────
+function renderNearAll() {
+  // ללא מיקום — מציג את כל העסקים
+  const el = document.getElementById('nearBizScroll');
+  el.innerHTML = businesses.map(b => buildCard(b)).join('');
+}
+
+function requestLocation() {
+  if (!navigator.geolocation) { renderNearAll(); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+    const nearby = businesses
+      .filter(b => b.lat && b.lng)
+      .map(b => ({ ...b, dist: Math.sqrt((b.lat-lat)**2 + (b.lng-lng)**2) }))
+      .sort((a,b) => a.dist - b.dist)
+      .slice(0,6);
+    const el = document.getElementById('nearBizScroll');
+    el.innerHTML = nearby.map(b => buildCard(b)).join('');
+    document.getElementById('locationBanner').style.display = 'none';
+  }, () => renderNearAll());
+}
+
+// ── BIZ SHEET ─────────────────────────────────────────────────────────────────
+const catLabelsMap = {food:'אוכל ושתייה',pro:'בעלי מקצוע',fashion:'ביגוד ואופנה',health:'בריאות ויופי',finance:'פיננסים',tech:'טכנולוגיה',legal:'משפטים'};
+
+function openBiz(id) {
+  const b = businesses.find(x => x.id === id);
+  if (!b) return;
+
+  // track
+  const key = '_hb_clicks_' + b.id;
+  const clicks = parseInt(localStorage.getItem(key) || b.clicks) + 1;
+  localStorage.setItem(key, clicks);
+
+  const colors = catColors[b.cat] || ['#003DA5','#002a75'];
+
+  // hero
+  document.getElementById('sheetHero').style.background =
+    `linear-gradient(135deg,${colors[0]}33,${colors[1]}55)`;
+  const logo = document.getElementById('sheetLogo');
+  logo.textContent = bizInitials(b.name);
+  logo.style.background = `linear-gradient(135deg,${colors[0]},${colors[1]})`;
+
+  // info
+  document.getElementById('sheetName').textContent = b.name;
+  document.getElementById('sheetDesc').textContent = b.desc || '';
+  document.getElementById('sheetClicks').textContent = clicks + ' חברים צפו בהטבה זו';
+
+  // meta
+  document.getElementById('sheetMeta').innerHTML = `
+    <span class="sheet-tag cat">${catLabelsMap[b.cat]||b.cat}</span>
+    ${b.online ? '<span class="sheet-tag online">🌐 אונליין</span>' : ''}
+    <span class="sheet-tag city">📍 ${b.city}</span>`;
+
+  // benefit
+  if (b.discount) {
+    document.getElementById('sheetBenefit').style.display = 'block';
+    document.getElementById('sheetBenefitText').textContent = b.discount;
+    document.getElementById('sheetBenefitType').textContent =
+      b.discountType === 'online' ? '🌐 מימוש באתר האינטרנט' : '🏪 מימוש בחנות הפיזית';
+
+    const area = document.getElementById('sheetCouponArea');
+    if (b.discountType === 'online' && b.coupon) {
+      area.innerHTML = `
+        <div class="sheet-coupon-box" style="display:block;margin-top:12px;">
+          <div class="coupon-lbl">קוד הקופון שלך</div>
+          <div class="coupon-code">${b.coupon}</div>
+          <button class="copy-btn" id="sCopyBtn" onclick="sCopyCoupon('${b.coupon}')">📋 העתק קוד</button>
+        </div>`;
+    } else if (b.discountType === 'physical') {
+      area.innerHTML = `
+        <div class="sheet-physical-box" style="display:block;margin-top:12px;">
+          <div style="font-size:32px">🎟️</div>
+          <h4>הצג את התעודה שלך</h4>
+          <p>הצג את תעודת החבר הדיגיטלית שלך בחנות וקבל את ההטבה.</p>
+          <a href="/profile.html">פתח תעודת חבר 🎟️</a>
+        </div>`;
+    } else {
+      area.innerHTML = '';
+    }
+  } else {
+    document.getElementById('sheetBenefit').style.display = 'none';
+    document.getElementById('sheetCouponArea').innerHTML = '';
+  }
+
+  // social
+  const links = [];
+  if (b.phone)     links.push(`<a href="tel:${b.phone}">📞 ${b.phone}</a>`);
+  if (b.website)   links.push(`<a href="https://${b.website}" target="_blank">🌐 אתר</a>`);
+  if (b.instagram) links.push(`<a href="https://instagram.com/${b.instagram}" target="_blank">📸 אינסטגרם</a>`);
+  document.getElementById('sheetSocial').innerHTML = links.join('');
+
+  // CTA
+  if (b.phone) {
+    document.getElementById('sheetCta').style.display = 'flex';
+    document.getElementById('sheetCallBtn').onclick = () => location.href = 'tel:' + b.phone;
+    const ph = b.phone.replace(/\D/g,'');
+    const intl = ph.startsWith('0') ? '972'+ph.slice(1) : ph;
+    document.getElementById('sheetWaBtn').onclick = () =>
+      window.open(`https://wa.me/${intl}?text=${encodeURIComponent('היי, ראיתי את העסק שלך בהבית הצהוב 💛')}`, '_blank');
+  } else {
+    document.getElementById('sheetCta').style.display = 'none';
+  }
+
+  // open
+  document.getElementById('bizOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBizSheet() {
+  document.getElementById('bizOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function sRevealCoupon(code) {
+  document.getElementById('sRevealBtn').style.display = 'none';
+  document.getElementById('sCouponBox').style.display = 'block';
+}
+
+function sRevealPhysical() {
+  document.getElementById('sRevealBtn').style.display  = 'none';
+  document.getElementById('sPhysicalBox').style.display = 'block';
+}
+
+function sCopyCoupon(code) {
+  navigator.clipboard?.writeText(code).catch(()=>{});
+  const btn = document.getElementById('sCopyBtn');
+  btn.textContent = '✓ הועתק!';
+  btn.classList.add('copied');
+  setTimeout(()=>{ btn.textContent='📋 העתק קוד'; btn.classList.remove('copied'); }, 2000);
+}
+
+// ── LOCATION ON LOAD ──────────────────────────────────────────────────────────
+function initLocation() {
+  const saved = localStorage.getItem('locationAllowed');
+
+  if (saved === 'true') {
+    // כבר אישר בעבר — נסה לקבל מיקום בשקט
+    navigator.geolocation?.getCurrentPosition(
+      pos => applyLocation(pos),
+      () => renderNearAll()
+    );
+  } else if (saved === 'false') {
+    // דחה בעבר — מציג הכל
+    renderNearAll();
+  } else {
+    // פעם ראשונה — מציג באנר
+    showLocationBanner();
+    renderNearAll();
+  }
+}
+
+function showLocationBanner() {
+  const banner = document.createElement('div');
+  banner.id = 'locationAskBanner';
+  banner.style.cssText = `
+    position:fixed; bottom:16px; left:12px; right:12px; z-index:200;
+    background:var(--blue-dk); border-radius:40px;
+    padding:10px 12px 10px 16px;
+    box-shadow:0 6px 24px rgba(0,0,0,.35);
+    border:1.5px solid rgba(255,215,0,.3);
+    display:flex; align-items:center; gap:10px;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:16px;">📍</span>
+    <span style="color:#fff;font-size:13px;font-weight:700;flex:1;">מצא עסקים קרובים אליך</span>
+    <button onclick="allowLocation()" style="background:var(--yellow);color:var(--blue-dk);border:none;border-radius:20px;padding:7px 14px;font-family:'Heebo',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">אפשר מיקום</button>
+    <button onclick="denyLocation()" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:none;border-radius:20px;padding:7px 12px;font-family:'Heebo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">לא עכשיו</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+function allowLocation() {
+  navigator.geolocation?.getCurrentPosition(
+    pos => {
+      localStorage.setItem('locationAllowed','true');
+      applyLocation(pos);
+      removeBanner();
+    },
+    () => {
+      localStorage.setItem('locationAllowed','false');
+      removeBanner();
+    }
+  );
+}
+
+function denyLocation() {
+  localStorage.setItem('locationAllowed','false');
+  removeBanner();
+}
+
+function dismissLocationBanner() {
+  removeBanner(); // לא שומר — ישאל שוב בכניסה הבאה
+}
+
+function removeBanner() {
+  const b = document.getElementById('locationAskBanner');
+  if (b) b.remove();
+}
+
+function applyLocation(pos) {
+  const { latitude: lat, longitude: lng } = pos.coords;
+  const nearby = businesses
+    .filter(b => b.lat && b.lng)
+    .map(b => ({ ...b, dist: Math.sqrt((b.lat-lat)**2 + (b.lng-lng)**2) }))
+    .sort((a,b) => a.dist - b.dist)
+    .slice(0,6);
+  const el = document.getElementById('nearBizScroll');
+  el.innerHTML = nearby.map(b => buildCard(b)).join('');
+  document.getElementById('locationBanner').style.display = 'none';
+}
+
+function requestLocation() {
+  allowLocation();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderSections();
+initLocation();
+</script>
+<!-- ══ BIZ MODAL ══ -->
+<div class="biz-overlay" id="bizOverlay" onclick="if(event.target===this)closeBizSheet()">
+  <div class="biz-sheet" id="bizSheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeBizSheet()">✕</button>
+    <div class="sheet-hero" id="sheetHero">
+      <div class="sheet-logo" id="sheetLogo"></div>
+    </div>
+    <div class="sheet-content">
+      <div class="sheet-name"  id="sheetName"></div>
+      <div class="sheet-meta"  id="sheetMeta"></div>
+      <div class="sheet-desc"  id="sheetDesc"></div>
+      <div class="sheet-benefit" id="sheetBenefit" style="display:none">
+        <div class="sheet-benefit-label">💛 ההטבה שלך</div>
+        <div class="sheet-benefit-text" id="sheetBenefitText"></div>
+        <div class="sheet-benefit-type" id="sheetBenefitType"></div>
+      </div>
+      <div id="sheetCouponArea"></div>
+      <div class="sheet-clicks" id="sheetClicks"></div>
+      <div class="sheet-social" id="sheetSocial"></div>
+      <div class="sheet-cta" id="sheetCta" style="display:none">
+        <button class="sheet-call" id="sheetCallBtn">📞 התקשר</button>
+        <button class="sheet-wa"   id="sheetWaBtn">💬 WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEV ONLY – למחיקה לפני העלאה -->
+<div id="_devBar" style="position:fixed;top:70px;left:8px;z-index:9999;display:flex;flex-direction:column;gap:6px;">
+  <a href="/" style="background:#002a75;color:#FFD700;border:1.5px solid #FFD700;border-radius:20px;padding:6px 12px;font-family:'Heebo',sans-serif;font-size:11px;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap;">← תפריט</a>
+</div>
+<div id="_tasksPanel" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);align-items:flex-end;justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#002a75;border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:80dvh;overflow-y:auto;padding:24px 20px 40px;border-top:3px solid #FFD700;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div style="color:#FFD700;font-size:17px;font-weight:900;font-family:'Heebo',sans-serif;">📋 משימות ורעיונות</div>
+      <button onclick="document.getElementById('_tasksPanel').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;cursor:pointer;">✕</button>
+    </div>
+    <div style="color:#FFD700;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:10px;">⚠️ למחיקה לפני העלאה</div>
+    <div style="background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:10px 12px;font-size:12px;color:rgba(255,215,0,.8);font-family:'Heebo',sans-serif;line-height:1.6;margin-bottom:6px;">🗑️ כפתורי תפריט ומשימות — בכל הדפים</div>
+    <div style="background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:10px 12px;font-size:12px;color:rgba(255,215,0,.8);font-family:'Heebo',sans-serif;line-height:1.6;margin-bottom:16px;">🗑️ דף nav.html — כולו</div>
+    <div style="color:#FFD700;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:10px;">📌 רעיונות לפיתוח</div>
+    <div id="_tasksList"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var tasks=[
+    {t:'רישום בני משפחה',d:'עד 2 בני משפחה תחת אותו חשבון'},
+    {t:'שליחת מייל אוטומטית (EmailJS)',d:'מייל נשלח בעת אישור. חינמי עד 200/חודש'},
+    {t:'Firebase Storage לתמונות',d:'שמירת לוגו ותמונות עסקים. חינמי עד 5GB'},
+    {t:'עיצוב תעודה — רקע בלומפילד',d:'תמונת יציע אוהדים כרקע. קובץ stadium.jpg'},
+    {t:'הוספה לארנק (Wallet)',d:'Apple/Google Wallet. לשלב מאוחר'}
+  ];
+  var saved=JSON.parse(localStorage.getItem('_hbTasks')||'{}');
+  var el=document.getElementById('_tasksList');
+  el.innerHTML=tasks.map(function(t,i){
+    var done=saved[i];
+    return '<div onclick="hbToggle('+i+')" id="_t'+i+'" style="background:rgba(255,255,255,'+(done?'.03':'.07')+');border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-family:\'Heebo\',sans-serif;'+(done?'opacity:.4':'')+'"><div style="width:18px;height:18px;border-radius:5px;border:2px solid rgba(255,215,0,.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;background:'+(done?'#FFD700':'none')+';color:#002a75;">'+(done?'✓':'')+'</div><div><div style="font-size:13px;font-weight:700;color:#fff;'+(done?'text-decoration:line-through':'')+'">'+t.t+'</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;">'+t.d+'</div></div></div>';
+  }).join('');
+  window.hbToggle=function(i){
+    saved[i]=!saved[i];
+    localStorage.setItem('_hbTasks',JSON.stringify(saved));
+    var done=saved[i];
+    var el2=document.getElementById('_t'+i);
+    el2.style.opacity=done?'.4':'1';
+    el2.querySelector('div').style.background=done?'#FFD700':'none';
+    el2.querySelector('div').textContent=done?'✓':'';
+    el2.querySelectorAll('div')[1].querySelector('div').style.textDecoration=done?'line-through':'none';
+  };
+})();
+</script>
+</body>
+</html>

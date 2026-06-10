@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where node *)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5500 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; Write-Host \"done\")",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(Get-Process powershell)",
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)",
+      "Bash(mkdir -p \"C:\\\\Users\\\\User\\\\Desktop\\\\הבית הצהוב\\\\.claude\")"
+    ]
+  }
+}
